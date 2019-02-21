@@ -1,0 +1,67 @@
+
+const formatNumber = n => {
+  n = n.toString()
+  return n[1] ? n : '0' + n
+}
+
+module.exports = {
+  formatTime: date => {
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hour = date.getHours()
+    const minute = date.getMinutes()
+    const second = date.getSeconds()
+
+    return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
+  },
+  formatTableData: txt => {
+    let table = txt.split('\r');
+    table.shift();
+    table = table.map(e => {
+      return e.replace(/\s/g, ' ').trim().split(' ').slice(4).map(e => parseFloat(e))
+    })
+    return table;
+  },
+  computeDays: birthday => {
+    const birthDate = new Date(birthday)
+    const nowDate = new Date();
+    const days = Math.floor((nowDate.getTime() - birthDate.getTime()) / (24 * 3600 * 1000))
+    return days
+  },
+  computePercent: (value, data) => {
+    const percentLevels = [0.1, 1, 3, 5, 10, 15, 25, 50, 75, 85, 90, 95, 97, 99, 99.9];
+    const centerIndex = 7;
+    let percent;
+    if (value == data[centerIndex]) {
+      percent = 50
+    } else if (value < data[centerIndex]) {
+      //小于中位数
+      let levelIndex;
+      
+      for (let i = centerIndex; i > 0; i--){
+        if (value > data[i-1]){
+          levelIndex = i-1;
+          break;
+        }
+      }
+      let extPercent = parseInt((value - data[levelIndex]) / (data[levelIndex + 1] - data[levelIndex]) * 100) / 100 * (percentLevels[levelIndex + 1] - percentLevels[levelIndex])
+
+      percent = percentLevels[levelIndex] + extPercent;
+    } else {
+      //大于中位数
+      let levelIndex;
+      for (let i = centerIndex; i < percentLevels.length-1; i++) {
+        if (value < data[i+1]) {
+          levelIndex = i;
+          break;
+        }
+      }
+      
+      let extPercent = parseInt((value - data[levelIndex]) / (data[levelIndex + 1] - data[levelIndex]) * 100) / 100 * (percentLevels[levelIndex + 1] - percentLevels[levelIndex])
+      
+      percent = percentLevels[levelIndex] + extPercent;
+    }
+    return percent
+  }
+}

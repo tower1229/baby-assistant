@@ -1,0 +1,38 @@
+<view class='flex-col' style='height:100%'>
+  <view class='cu-custom' style="height:{{CustomBar}}px;">
+    <view class="cu-bar fixed bg-pink light" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+      <view class='content'>宝贝成长助理</view>
+    </view>
+  </view>
+  <scroll-view scroll-x class="bg-white nav">
+    <view class='flex text-center'>
+      <view class="cu-item flex-sub {{index==TabCur?'text-pink cur':''}}" wx:for="{{channels}}" wx:key bindtap='tabSelect' data-id="{{index}}">
+        <view class='icon-{{item.icon}} lg'></view>
+        <text>{{item.text}}</text>
+      </view>
+    </view>
+  </scroll-view>
+  <swiper class="screen-swiper flex-1" current='{{TabCur}}' bindanimationfinish="swiperChange">
+    <swiper-item wx:for="{{channels}}" wx:key class="scroll_cont padding">
+      <radio-chart wx:if="{{index===0}}" current-index="{{TabCur}}" ></radio-chart>
+      <bar-chart wx:if="{{index===1}}" current-index="{{TabCur}}" ></bar-chart>
+      <line-chart wx:if="{{index===2}}" current-index="{{TabCur}}"></line-chart>
+    </swiper-item>
+  </swiper>
+
+</view>
+<!-- 初始化数据 -->
+<view class="cu-modal {{modalVisible ? 'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class='content'>初始化数据</view>
+    </view>
+    <view class='padding-xl'>
+      {{downloadPercent}} %
+    </view>
+  </view>
+</view>
+<!-- 登录loading -->
+<view class='cu-load load-modal' wx:if="{{loadModal}}"> 
+    <view class='gray-text'>登录...</view>
+</view>

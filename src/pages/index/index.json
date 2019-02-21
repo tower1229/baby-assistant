@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "radio-chart": "/components/radioChart/radioChart",
+    "bar-chart": "/components/barChart/barChart",
+    "line-chart": "/components/lineChart/lineChart"
+  }
+}

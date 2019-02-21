@@ -1,0 +1,95 @@
+// components/radioChart/radioChart.js
+const app = getApp()
+const util = require('../../utils/util.js');
+let ctx2;
+let ctxWidth;
+let animation = wx.createAnimation({
+  delay: 300,
+  timingFunction: 'ease'
+});
+
+Component({
+  /**
+   * 组件的属性列表
+   */
+  properties: {
+    currentIndex: { // 属性名
+      type: Number,
+      value: 0, // 属性初始值（可选），如果未指定则会根据类型选择一个
+      observer(newVal, oldVal, changedPath) {
+        //console.log(newVal)
+      }
+    }
+  },
+
+  /**
+   * 组件的初始数据
+   */
+  data: {
+    baby: {},
+    percent: 0,
+    animation: null,
+    standards: []
+  },
+
+  /**
+   * 组件的方法列表
+   */
+  methods: {
+    setPercent: function(percent){
+      
+      let deg = 135 / 50 * (percent - 50);
+      animation.rotate(deg).step();
+
+      this.setData({
+        animation: animation.export(),
+        percent: percent
+      })
+    },
+    fetchData: function(){
+      
+      const filePath = wx.getStorageSync('storageFileHash');
+      const fs = wx.getFileSystemManager();
+
+      fs.readFile({
+        filePath: filePath['wfa_boys_p_exp.txt'],
+        encoding: 'utf-8',
+        success: res => {
+          let table = util.formatTableData(res.data);
+          this.setData({
+            standards: table
+          }, this.show)
+        },
+        fail: res => {
+          console.warn(res.errMsg)
+        }
+      })
+
+    },
+    show: function(){
+      if (this.data.baby.birthday){
+        let babyDays = util.computeDays(this.data.baby.birthday);
+        let percent = util.computePercent(this.data.baby.weight, this.data.standards[babyDays]);
+        this.setPercent(percent)
+      }else{
+        
+      }
+      
+    },
+    editBaby: function(){
+      wx.navigateTo({
+        url: '/pages/baby/baby'
+      })
+    }
+  },
+  lifetimes: {
+    attached: function(){
+      // 宝宝数据
+      if (app.globalData.baby) {
+        this.setData({
+          baby: app.globalData.baby
+        }, this.fetchData)
+      }
+    }
+  }
+})

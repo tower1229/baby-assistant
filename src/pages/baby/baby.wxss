@@ -1,0 +1,2 @@
+/* pages/baby/baby.wxss */
+.cu-form-group input{text-align: right;}

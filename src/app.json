@@ -1,0 +1,15 @@
+{
+  "cloud": true,
+  "pages": [
+    "pages/index/index",
+    "pages/baby/baby",
+    "components/barChart/barChart"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "宝贝成长助理",
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "white"
+  }
+}

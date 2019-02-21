@@ -1,0 +1,87 @@
+<!--pages/baby/baby.wxml-->
+<view class='cu-custom' style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-pink light" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+      <text class='icon-back'></text> 宝贝信息
+    </navigator>
+  </view>
+</view>
+<view class="cu-card case {{isCard?'no-card':''}}">
+  <view class="cu-item shadow">
+    <view class='image' bindtap='uploadImg'>
+      <image src="{{photo}}" mode="widthFix" style='background:#ccc'></image>
+      <view class="cu-tag bg-pink"><text class='icon-crownfill lg text-yellow'></text> 点击换照片</view>
+      <view wx-if="{{days}}" class='cu-bar bg-shadeBottom'>本宝宝{{days}}天啦！</view>
+    </view>
+    <view class="cu-list menu menu-avatar">
+      <view class="cu-item" bindtap='edit'>
+        <view class="cu-avatar round lg" style="background-image:url(https://image.weilanwl.com/img/square-4.jpg);"></view>
+        <view class='content flex-sub'>
+          <view class='text-grey'>体重：{{weight || '-'}} KG</view>
+          <view class='text-grey flex justify-between'>
+            身高：{{length || '-'}} CM
+            <view class="text-pink text-sm">
+              <text class='icon-upload'></text>
+              点击更新数据
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>
+<view class="cu-modal {{modalVisible ? 'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class='content'>宝贝成长数据</view>
+    </view>
+    <form>
+      <view class="cu-form-group">
+        <view class='title'>宝宝生日</view>
+        <picker mode="date" value="{{birthday}}" start="2015-09-01" bindchange="DateChange">
+          <view class="picker">
+            {{birthday}}
+          </view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class='title'>宝宝性别</view>
+        <picker bindchange="PickerChange" value="{{gender}}" range="{{picker}}">
+          <view class="picker">
+            {{gender}}
+          </view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class='title'>最新体重</view>
+        <input value="{{weight}}" 
+          class='radius'
+          type='digit'
+          bindblur="updateWeight"></input>
+        <view class="cu-capsule radius">
+          <view class='cu-tag bg-gray '>
+            KG
+          </view>
+        </view>
+      </view>
+      <view class="cu-form-group">
+        <view class='title'>最新身高</view>
+        <input value="{{length}}" 
+          class='radius' 
+          type='digit'
+          bindblur="updateLength"></input>
+        <view class="cu-capsule radius">
+          <view class='cu-tag bg-gray '>
+            CM
+          </view>
+        </view>
+      </view>
+      <view class='cu-form-group padding'>
+        <button class='cu-btn block bg-pink lg flex-1' bindtap='update'>
+          <text class='icon-upload'></text> 填好啦</button>
+      </view>
+    </form>
+  </view>
+</view>
+
