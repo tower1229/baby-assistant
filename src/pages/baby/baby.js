@@ -22,10 +22,16 @@ Page({
   },
   PickerChange(e) {
     baby.gender = this.data.picker[e.detail.value]
+    this.setData({
+      gender: baby.gender
+    })
   },
   DateChange(e) {
     baby.birthday = e.detail.value;
     baby.days = util.computeDays(baby.birthday)
+    this.setData({
+      birthday: baby.birthday
+    })
   },
   uploadImg: function() {
     wx.chooseImage({
@@ -33,19 +39,37 @@ Page({
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
       success: res => {
-        // tempFilePath可以作为img标签的src属性显示图片
-        baby.photo = res.tempFilePaths
-        // 上传
+        wx.showLoading({
+          title: '正在上传...',
+        })
+        let oldImgId = baby.photo;
+        // 上传图片
         wx.cloud.uploadFile({
-          cloudPath: 'baby-photo.png',
-          filePath: res.tempFilePaths, // 文件路径
+          cloudPath: app.globalData.openid + '/baby-photo-' + parseInt(Math.random() * 1e6) +'.png',
+          filePath: res.tempFilePaths[0], // 文件路径
           success: res => {
             // get resource ID
-            console.log(res.fileID)
-            baby.photo = res.fileID
+            baby.photo = res.fileID;
+            this.syncCloud(() => {
+              this.setData({
+                photo: baby.photo
+              }, wx.hideLoading)
+            })
+            // 删除旧图片
+            wx.cloud.deleteFile({
+              fileList: [oldImgId],
+              success: res => {
+                // handle success
+                console.log('旧图已删除')
+              },
+              fail: err => {
+                // handle error
+              }
+            })
           },
           fail: err => {
-            // handle error
+            console.log(err)
+            wx.hideLoading()
           }
         })
       }
@@ -58,11 +82,9 @@ Page({
   },
   updateWeight: function(e){
     baby.weight = e.detail.value
-    
   },
   updateLength: function (e) {
     baby.length = e.detail.value
-    
   },
   checkData: function(){
     if(!baby.birthday){
@@ -73,6 +95,22 @@ Page({
     }
     
     return baby.birthday && baby.weight && baby.length
+  },
+  syncCloud: function(callback){
+    // 上传到云端
+    delete baby._id;
+    delete baby._openid;
+
+    app.globalData.db.collection('baby').doc(app.globalData.openid).set({
+      data: baby,
+      success: res => {
+        console.log('同步成功')
+        typeof callback === 'function' && callback.call(this)
+      },
+      fail: err => {
+        console.warn(err)
+      }
+    })
   },
   update: function(){
     //验证
@@ -89,16 +127,11 @@ Page({
       ...baby
     });
     app.globalData.baby = baby;
-    // 上传到云端
-    app.globalData.db.collection('baby').doc(app.globalData.openid).set({
-      data: baby,
-      success: res => {
-        console.log('同步成功')
-      }
-    })
+    this.syncCloud()
   },
   onReady: function () {
     baby = app.globalData.baby;
+    baby.days = util.computeDays(baby.birthday)
     this.setData({
       ...baby
     })

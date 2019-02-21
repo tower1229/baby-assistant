@@ -10,3 +10,5 @@
 top:60rpx;left:50%; margin-left:-22rpx;}
 .canvas._layer{z-index: 3;text-align: center;line-height: 1.7;color:#8799a3;}
 .canvas._layer ._main{font-size:2.2em;color:#333333;}
+
+.tipMsg{text-align: center;font-size:1.5em;}

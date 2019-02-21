@@ -9,13 +9,19 @@
 <view class="cu-card case {{isCard?'no-card':''}}">
   <view class="cu-item shadow">
     <view class='image' bindtap='uploadImg'>
-      <image src="{{photo}}" mode="widthFix" style='background:#ccc'></image>
+      <image src="{{photo}}" mode="aspectFill" style='background:#ccc'></image>
       <view class="cu-tag bg-pink"><text class='icon-crownfill lg text-yellow'></text> 点击换照片</view>
-      <view wx-if="{{days}}" class='cu-bar bg-shadeBottom'>本宝宝{{days}}天啦！</view>
+      <view wx-if="{{days}}" class='cu-bar bg-shadeBottom'>本宝宝健康成长 {{days}} 天啦！</view>
     </view>
     <view class="cu-list menu menu-avatar">
       <view class="cu-item" bindtap='edit'>
-        <view class="cu-avatar round lg" style="background-image:url(https://image.weilanwl.com/img/square-4.jpg);"></view>
+        <view wx:if="{{gender==='男'}}" class="cu-avatar lg round bg-blue">
+          <text class='icon-crown lg'></text>
+        </view>
+        <view wx:if="{{gender==='女'}}" class="cu-avatar lg round bg-red">
+          <text class='icon-evaluate lg'></text>
+        </view>
+        
         <view class='content flex-sub'>
           <view class='text-grey'>体重：{{weight || '-'}} KG</view>
           <view class='text-grey flex justify-between'>

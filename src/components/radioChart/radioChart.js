@@ -50,9 +50,13 @@ Component({
       
       const filePath = wx.getStorageSync('storageFileHash');
       const fs = wx.getFileSystemManager();
-
+      const fileName = this.data.baby.gender === '男' ? 'wfa_boys_p_exp.txt' : 'wfa_girls_p_exp.txt';
+      if (!filePath[fileName]){
+        return console.warn(fileName + '存储异常！')
+      }
+      
       fs.readFile({
-        filePath: filePath['wfa_boys_p_exp.txt'],
+        filePath: filePath[fileName],
         encoding: 'utf-8',
         success: res => {
           let table = util.formatTableData(res.data);
@@ -80,16 +84,24 @@ Component({
       wx.navigateTo({
         url: '/pages/baby/baby'
       })
-    }
-  },
-  lifetimes: {
-    attached: function(){
+    },
+    updateBaby: function () {
       // 宝宝数据
       if (app.globalData.baby) {
         this.setData({
           baby: app.globalData.baby
         }, this.fetchData)
       }
+    }
+  },
+  lifetimes: {
+    attached: function(){
+      this.updateBaby()
+    }
+  },
+  pageLifetimes: {
+    show: function(){
+      this.updateBaby()
     }
   }
 })
