@@ -5,11 +5,11 @@
       <text class='maintext'>{{baby.length}}</text> CM
       <view class='tipMsg'>
       <!-- [0.1, 1, 3, 5, 10, 15, 25, 50, 75, 85, 90, 95, 97, 99, 99.9] -->
-        <text wx:if="{{percent>25 && percent<75}}">身高均衡，继续保持！</text>
-        <text wx:if="{{percent>15 && percent<25}}">身高偏轻，加强营养！</text>
-        <text wx:if="{{percent<15}}">身高较轻，注意饮食！</text>
-        <text wx:if="{{percent>75 && percent<85}}">身高偏重，加强运动！</text>
-        <text wx:if="{{percent>85}}">身高较重，注意饮食！</text>
+        <text wx:if="{{percent>25 && percent<75}}">身高发域正常，宝宝很棒！</text>
+        <text wx:if="{{percent>15 && percent<25}}">身高偏低，加强营养！</text>
+        <text wx:if="{{percent<15}}">身高较低，注意饮食！</text>
+        <text wx:if="{{percent>75 && percent<85}}">身高偏高，宝宝很棒！</text>
+        <text wx:if="{{percent>85}}">身高较高，宝宝很棒！</text>
       </view>
     </view>
   </view>
