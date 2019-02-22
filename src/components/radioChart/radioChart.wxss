@@ -7,7 +7,7 @@
 .canvas._panel{z-index: 1;}
 .canvas._pointer{z-index: 2;transform:rotate(-135deg);}
 .canvas._pointer::after{content: "";position: absolute;width:0;height:0;border-style: solid;border-width: 12rpx 22rpx;border-color:transparent transparent #333 transparent;
-top:60rpx;left:50%; margin-left:-22rpx;}
+top:68rpx;left:50%; margin-left:-22rpx;}
 .canvas._layer{z-index: 3;text-align: center;line-height: 1.7;color:#8799a3;}
 .canvas._layer ._main{font-size:2.2em;color:#333333;}
 

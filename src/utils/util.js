@@ -62,6 +62,6 @@ module.exports = {
       
       percent = percentLevels[levelIndex] + extPercent;
     }
-    return percent
+    return parseInt(percent * 100) / 100
   }
 }
