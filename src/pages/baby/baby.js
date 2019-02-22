@@ -12,6 +12,7 @@ Page({
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     photo: '',
+    locaAvatFile: wx.getStorageSync('babyAvatCache'),
     picker: ['男', '女'],
     birthday: '2018-03-19',
     gender: '男',
@@ -53,8 +54,12 @@ Page({
             this.syncCloud(() => {
               this.setData({
                 photo: baby.photo
-              }, wx.hideLoading)
+              }, function(){
+                wx.hideLoading()
+                this.setAvatCache(true)
+              })
             })
+            
             // 删除旧图片
             wx.cloud.deleteFile({
               fileList: [oldImgId],
@@ -112,9 +117,9 @@ Page({
       }
     })
   },
-  update: function(){
+  update: function(jumpCheck){
     //验证
-    if (!this.checkData()) {
+    if (!jumpCheck && !this.checkData()) {
       console.log(baby)
       return wx.showToast({
         title: '宝贝信息不完善',
@@ -129,12 +134,38 @@ Page({
     app.globalData.baby = baby;
     this.syncCloud()
   },
+  setAvatCache: function(forceUpdate){
+    //头像缓存
+    if (this.data.photo) {
+      if (forceUpdate || (!forceUpdate && !this.data.locaAvatFile)) {
+        wx.showLoading({
+          title: '更新头像缓存...',
+        })
+        wx.cloud.downloadFile({
+          fileID: this.data.photo,
+          success: res => {
+            // 返回临时文件路径
+            console.log(res.tempFilePath)
+            wx.setStorage({
+              key: 'babyAvatCache',
+              data: res.tempFilePath,
+            })
+            this.setData({
+              locaAvatFile: res.tempFilePath
+            }, wx.hideLoading )
+            this.update(true);
+          },
+          fail: console.error
+        })
+      }
+    }
+  },
   onReady: function () {
     baby = app.globalData.baby;
     baby.days = util.computeDays(baby.birthday)
     this.setData({
       ...baby
-    })
+    }, this.setAvatCache)
     
     if (!this.checkData()){
       this.setData({

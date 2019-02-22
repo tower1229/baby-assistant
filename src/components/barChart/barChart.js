@@ -1,66 +1,104 @@
-// src/components/barChart/barChart.js
-Page({
+// components/radioChart/radioChart.js
+const app = getApp()
+const util = require('../../utils/util.js');
+let animation = wx.createAnimation({
+  delay: 300,
+  timingFunction: 'ease'
+});
+
+Component({
+  /**
+   * 组件的属性列表
+   */
+  properties: {
+    currentIndex: { // 属性名
+      type: Number,
+      value: 0, // 属性初始值（可选），如果未指定则会根据类型选择一个
+      observer(newVal, oldVal, changedPath) {
+        //console.log(newVal)
+      }
+    }
+  },
 
   /**
-   * 页面的初始数据
+   * 组件的初始数据
    */
   data: {
-
+    baby: {},
+    percent: 0,
+    animation: null,
+    standards: []
   },
 
   /**
-   * 生命周期函数--监听页面加载
+   * 组件的方法列表
    */
-  onLoad: function (options) {
+  methods: {
+    setPercent: function (percent) {
+      const screenWidth = wx.getSystemInfoSync().windowWidth;
+      const percentPx = parseInt(screenWidth / 750 * 562.5 / 100 * percent);
+      
+      animation.translateY(-percentPx).step();
 
+      this.setData({
+        animation: animation.export(),
+        percent: percent
+      })
+    },
+    fetchData: function () {
+      const filePath = wx.getStorageSync('storageFileHash');
+      const fs = wx.getFileSystemManager();
+      const fileName = this.data.baby.gender === '男' ? 'lhfa_boys_p_exp.txt' : 'lhfa_girls_p_exp.txt';
+      if (!filePath[fileName]) {
+        return console.warn(fileName + '存储异常！')
+      }
+
+      fs.readFile({
+        filePath: filePath[fileName],
+        encoding: 'utf-8',
+        success: res => {
+          let table = util.formatTableData(res.data);
+          this.setData({
+            standards: table
+          }, this.show)
+        },
+        fail: res => {
+          console.warn(res.errMsg)
+        }
+      })
+
+    },
+    show: function () {
+      if (this.data.baby.birthday) {
+        let babyDays = util.computeDays(this.data.baby.birthday);
+        let percent = util.computePercent(this.data.baby.length, this.data.standards[babyDays]);
+        this.setPercent(percent)
+      } else {
+
+      }
+    },
+    editBaby: function () {
+      wx.navigateTo({
+        url: '/pages/baby/baby'
+      })
+    },
+    updateBaby: function () {
+      // 宝宝数据
+      if (app.globalData.baby) {
+        this.setData({
+          baby: app.globalData.baby
+        }, this.fetchData)
+      }
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  lifetimes: {
+    attached: function () {
+      this.updateBaby()
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  pageLifetimes: {
+    show: function () {
+      this.updateBaby()
+    }
   }
 })

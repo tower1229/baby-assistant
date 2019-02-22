@@ -1,8 +1,6 @@
 // components/radioChart/radioChart.js
 const app = getApp()
 const util = require('../../utils/util.js');
-let ctx2;
-let ctxWidth;
 let animation = wx.createAnimation({
   delay: 300,
   timingFunction: 'ease'

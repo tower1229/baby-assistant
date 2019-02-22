@@ -2,8 +2,8 @@
 .flex-col {overflow: hidden;display: flex; flex-direction: column;}
 .justify-center {justify-content: center;}
 /* components/radioChart/radioChart.wxss */
-.canvasWrap{position: relative;width: 690rpx; height: 690rpx;}
-.canvas{position: absolute;left:0;top:0;width: 690rpx; height: 690rpx;}
+.canvasWrap{position: relative;width: 750rpx; height: 750rpx;}
+.canvas{position: absolute;left:0;top:0;width: 750rpx; height: 750rpx;}
 .canvas._panel{z-index: 1;}
 .canvas._pointer{z-index: 2;transform:rotate(-135deg);}
 .canvas._pointer::after{content: "";position: absolute;width:0;height:0;border-style: solid;border-width: 12rpx 22rpx;border-color:transparent transparent #333 transparent;

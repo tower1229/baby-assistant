@@ -8,9 +8,6 @@ Page({
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo'),
     TabCur: 0,
     channels: [],
     downloadPercent: 0,
@@ -41,13 +38,6 @@ Page({
     this.setData({
       TabCur: e.detail.current
     })
-  },
-  getUserInfo: function (e) {
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
-    }, this.userInit)
   },
   updateDownloadPercent: function (downFileNumber) {
     this.setData({
@@ -115,11 +105,10 @@ Page({
     })
     
   },
-  userInit: function () {
+  checkData: function () {
     // 检查数据
     wx.getSavedFileList({
       success: (res) => {
-
         const filePath = wx.getStorageSync('storageFileHash');
         
         if (Object.keys(filePath).length < app.globalData.fileList.length) {
@@ -177,32 +166,6 @@ Page({
     })
   },
   onReady: function () {
-    
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      }, this.userInit)
-    } else if (this.data.canIUse) {
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        }, this.userInit)
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          }, this.userInit)
-        }
-      })
-    }
+    this.checkData()
   }
 })

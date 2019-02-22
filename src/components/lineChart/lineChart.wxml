@@ -1,2 +1,16 @@
 <!--components/lineChart/lineChart.wxml-->
-<text>components/lineChart/lineChart.wxml</text>
+<view class='linewrap flex-col'>
+  <view class='_cont flex-1'>
+    text
+  </view>
+  <view class='textmarks'>
+    <text class='_m1'>10</text>
+    <text class='_m2'>15</text>
+    <text class='_m3'>25</text>
+    <text class='_m4'>50%</text>
+    <text class='_m5'>75</text>
+    <text class='_m6'>85</text>
+    <text class='_m7'>90</text>
+  </view>
+  <image class='_canvas' src="/res/img/linePanel.png"></image>
+</view>
