@@ -1,4 +1,34 @@
 <!--components/lineChart/lineChart.wxml-->
 <view class='linewrap flex-col'>
-  coming
+  <view class='_cont flex-1 flex-row align-center'>
+    <view class='flex-1'>
+      <text class='maintext'>BMI {{bmi}}</text>
+      <view class='tipMsg'>
+      <!-- [0.1, 1, 3, 5, 10, 15, 25, 50, 75, 85, 90, 95, 97, 99, 99.9] -->
+        <text wx:if="{{percent>25 && percent<75}}">身材均衡，宝宝很棒！</text>
+        <text wx:if="{{percent>15 && percent<25}}">宝宝偏瘦，注意饮食！</text>
+        <text wx:if="{{percent<15}}">宝宝较瘦，加强营养！</text>
+        <text wx:if="{{percent>75 && percent<85}}">宝宝偏胖，注意饮食！</text>
+        <text wx:if="{{percent>85}}">宝宝较胖，合理喂养！</text>
+      </view>
+    </view>
+  </view>
+  <!-- <view class='textmarks'>
+    <text class='_m1'>10</text>
+    <text class='_m2'>15</text>
+    <text class='_m3'>25</text>
+    <text class='_m4'>50%</text>
+    <text class='_m5'>75</text>
+    <text class='_m6'>85</text>
+    <text class='_m7'>90</text>
+  </view> -->
+  <view class='_chart' bindtap='editBaby'>
+    <image class='_canvas' src="/res/img/linePanel.png"></image>
+    <view class='_lineWrap'>
+      <view class='_line'animation='{{animation}}'>
+        <view class='_tag'>超过 {{percent}}% 同龄宝宝</view>
+        
+      </view>
+    </view>
+  </view>
 </view>

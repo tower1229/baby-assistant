@@ -1,6 +1,9 @@
 <view class='flex-col' style='height:100%'>
   <view class='cu-custom' style="height:{{CustomBar}}px;">
     <view class="cu-bar fixed bg-pink light" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+      <view class='pageMenu' bindtap='tointro'>
+        <text class='icon-question'></text>
+      </view>
       <view class='content'>宝贝成长助理</view>
     </view>
   </view>

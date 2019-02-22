@@ -6,6 +6,7 @@
     </navigator>
   </view>
 </view>
+
 <view class="cu-card case {{isCard?'no-card':''}}">
   <view class="cu-item shadow">
     <view class='image' bindtap='uploadImg'>
@@ -45,7 +46,7 @@
     <form>
       <view class="cu-form-group">
         <view class='title'>宝宝生日</view>
-        <picker mode="date" value="{{birthday}}" start="2015-09-01" bindchange="DateChange">
+        <picker mode="date" value="{{birthday}}" start="2013-09-01" bindchange="DateChange">
           <view class="picker">
             {{birthday}}
           </view>

@@ -39,6 +39,11 @@ Page({
       TabCur: e.detail.current
     })
   },
+  tointro: function(){
+    wx.navigateTo({
+      url: '/pages/about/about',
+    })
+  },
   updateDownloadPercent: function (downFileNumber) {
     this.setData({
       downloadPercent: Math.floor(downFileNumber / app.globalData.fileList.length * 100)
@@ -55,7 +60,6 @@ Page({
           })
         }else{
           console.log('客户端问题')
-
         }
         
       }
@@ -63,15 +67,12 @@ Page({
   },
   login: function (callback) {
     //登录
-    this.setData({
-      loadModal: true
-    })
     if (app.globalData.openid){
-      this.setData({
-        loadModal: false
-      })
       typeof callback === 'function' && callback.call(this, app.globalData.openid)
     }else{
+      this.setData({
+        loadModal: true
+      })
       wx.cloud.callFunction({
         name: 'login',
         complete: res => {
@@ -90,7 +91,6 @@ Page({
     this.login(function (openid){
       app.globalData.db.collection('baby').doc(openid).get({
         success: res => {
-          
           const baby = res.data; //wx.getStorageSync('baby');
           if (baby.birthday && baby.weight && baby.length) {
             app.globalData.baby = baby;
@@ -100,6 +100,11 @@ Page({
               url: '/pages/baby/baby'
             })
           }
+        },
+        fail: err => {
+          wx.navigateTo({
+            url: '/pages/baby/baby'
+          })
         }
       })
     })
@@ -164,6 +169,9 @@ Page({
         }
       }
     })
+  },
+  onShow: function(){
+    this.checkBaby()
   },
   onReady: function () {
     this.checkData()

@@ -3,7 +3,8 @@
   "pages": [
     "pages/index/index",
     "pages/baby/baby",
-    "components/barChart/barChart"
+    "components/barChart/barChart",
+    "pages/about/about"
   ],
   "window": {
     "backgroundTextStyle": "light",

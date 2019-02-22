@@ -16,8 +16,8 @@ Page({
     picker: ['男', '女'],
     birthday: '2018-03-19',
     gender: '男',
-    weight: 0,
-    length: 0,
+    weight: null,
+    length: null,
     days: 0,
     modalVisible: false
   },
@@ -98,8 +98,7 @@ Page({
     if (!baby.gender) {
       baby.gender = '男'
     }
-    
-    return baby.birthday && baby.weight && baby.length
+    return !!baby.weight && !!baby.length
   },
   syncCloud: function(callback){
     // 上传到云端
@@ -117,7 +116,7 @@ Page({
       }
     })
   },
-  update: function(jumpCheck){
+  update: function(e, jumpCheck){
     //验证
     if (!jumpCheck && !this.checkData()) {
       console.log(baby)
@@ -138,6 +137,7 @@ Page({
     //头像缓存
     if (this.data.photo) {
       if (forceUpdate || (!forceUpdate && !this.data.locaAvatFile)) {
+        console.log(this.data.locaAvatFile)
         wx.showLoading({
           title: '更新头像缓存...',
         })
@@ -153,7 +153,7 @@ Page({
             this.setData({
               locaAvatFile: res.tempFilePath
             }, wx.hideLoading )
-            this.update(true);
+            this.update(true, true);
           },
           fail: console.error
         })
@@ -162,7 +162,10 @@ Page({
   },
   onReady: function () {
     baby = app.globalData.baby;
-    baby.days = util.computeDays(baby.birthday)
+    if (baby.birthday){
+      baby.days = util.computeDays(baby.birthday)
+    }
+    
     this.setData({
       ...baby
     }, this.setAvatCache)

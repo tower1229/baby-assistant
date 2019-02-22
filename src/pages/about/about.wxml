@@ -1,0 +1,140 @@
+<!--pages/baby/baby.wxml-->
+<view class='cu-custom' style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-pink light" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+      <text class='icon-back'></text>
+    </navigator>
+  </view>
+</view>
+<view class="cu-list menu  margin-top">
+  <view class="cu-item">
+    <view class='content'>
+      <text class='icon-creative text-grey'></text>
+      <text class='text-grey'>关于作者</text>
+    </view>
+  </view>
+  <view class="cu-list menu menu-avatar">
+  <view class="cu-item">
+    <view class="cu-avatar round lg" style="background:#ccc;overflow:hidden;">
+      <image style='width:100%;height:100%' src='/res/img/album.jpg'></image>
+    </view>
+    <view class='content'>
+      <view class='text-grey'>雅X共赏</view>
+      <view class='text-gray text-sm'>
+        <text class='icon-vip text-red'></text> 一个宝爸</view>
+    </view>
+    <view class='action'>
+      <button class='cu-btn round line-green shadow' bindtap='copylinkurl'
+      data-link="DoWhatILike">加微信</button>
+    </view>
+  </view>
+  
+  </view>
+</view>
+
+<view class='margin-top'>
+  <official-account binderror="accounterror"></official-account>
+</view>
+
+<view class="cu-list menu  margin-top">
+  <view class="cu-item">
+    <view class='content'>
+      <text class='icon-subscription text-grey'></text>
+      <text class='text-grey'>数据来源</text>
+    </view>
+  </view>
+  <view class="cu-bar bg-white solid-bottom">
+    <view class='action'>
+      <text class='icon-title text-orange '></text> 世界卫生组织
+    </view>
+    <view class='action'>
+      <button class='cu-btn shadow' bindtap="updateData">更新数据</button>
+    </view>
+  </view>
+</view>
+
+<view class="cu-list menu  margin-top">
+  <view class="cu-item">
+    <view class='content'>
+      <text class='icon-question text-grey'></text>
+      <text class='text-grey'>常见问题</text>
+    </view>
+  </view>
+  <view class="cu-card article no-card">
+    <view wx:for="1" wx:key class="cu-item shadow">
+      <view class="title">如何解读世卫组织婴幼儿成长标准数据？</view>
+      <view class="content">
+        <view class="desc">
+          <view class='text-content'>世卫标准数据呈现了5岁以内婴幼儿多种成长数据的分布占比，具体占比包括：0.1, 1, 3, 5, 10, 15, 25, 50, 75, 85, 90, 95, 97, 99, 99.9(%)，其中，中位数附近为最佳状态值，25%-75%之间为正常范围；15%-25%以及75%-85%之间为一级偏差，例如在体重上对应的评价是偏轻或偏重；10%-15%以及85%-90%之间为二级偏差，例如在体重上对应的评价是较轻或较重。以此类推。</view>
+          <view>
+            <view class='cu-tag bg-green light round' bindtap='copylinkurl'
+            data-link='https://www.who.int/childgrowth/standards/en/'>引用地址</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="cu-card article no-card">
+    <view wx:for="1" wx:key class="cu-item shadow">
+      <view class="title">这些标准是否适用于所有儿童？</view>
+      <view class="content">
+        <view class="desc">
+          <view class='text-content'>标准描述了在最佳环境条件下从出生到5岁的正常儿童生长，并且可以适用于所有地方的所有儿童，无论种族，社会经济状况和喂养类型如何。</view>
+          <view>
+            <view class='cu-tag bg-green light round' bindtap='copylinkurl'
+            data-link='https://www.who.int/childgrowth/faqs/applicable/en/'>引用地址</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="cu-card article no-card">
+    <view wx:for="1" wx:key class="cu-item shadow">
+      <view class="title">需要做什么改进，以便所有儿童都能按照这些标准成长？</view>
+      <view class="content">
+        <view class="desc">
+          <view class='text-content'>应支持、保护、促进母乳喂养，宝宝出生的前6个月进行纯母乳喂养，在之后的两年内补充喂养有益健康和营养的食物。提供疫苗接种和良好的保健服务。</view>
+          <view>
+            <view class='cu-tag bg-green light round' bindtap='copylinkurl'
+            data-link='https://www.who.int/childgrowth/faqs/what_to_do/en/'>引用地址</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="cu-card article no-card">
+    <view wx:for="1" wx:key class="cu-item shadow">
+      <view class="title">成长助理的数据呈现方式？</view>
+      <view class="content">
+        <view class="desc">
+          <view class='text-content'>标准数据提供了15个分布区间，所以不能法精确定位一个数据在整个样本中的具体分布位置。为了尽可能精确定位宝宝成长数据的分布情况，默认将每个区间内的数据分布视为均匀且连续的，因此最终结果仅供参考，不保证准确。</view>
+          
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>
+
+<!-- 更新数据确认 -->
+
+<view class="cu-modal {{dialogVisible ?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class='content'>确定</view>
+      <view class='action' bindtap='hideModal'>
+        <text class='icon-close text-red'></text>
+      </view>
+    </view>
+    <view class='padding-xl'>
+      小程序将重启并更新数据
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class='action'>
+        <button class='cu-btn line-green text-green' bindtap='restart'>确定</button>
+        <button class='cu-btn margin-left' bindtap='hideModal'>取消</button>
+
+      </view>
+    </view>
+  </view>
+</view>

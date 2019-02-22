@@ -17,7 +17,7 @@ App({
   },
   globalData: {
     userInfo: null,
-    whoHost: 'https://www.who.int/childgrowth/standards/',
+    whoHost: 'https://static.refined-x.com/',
     fileList: [
       'bfa_boys_p_exp.txt',
       'bfa_girls_p_exp.txt',
