@@ -46,7 +46,10 @@
     <form>
       <view class="cu-form-group">
         <view class='title'>宝宝生日</view>
-        <picker mode="date" value="{{birthday}}" start="2013-09-01" bindchange="DateChange">
+        <picker mode="date" value="{{birthday}}" 
+        start="{{startDate}}"
+        end="{{today}}"
+        bindchange="DateChange">
           <view class="picker">
             {{birthday}}
           </view>

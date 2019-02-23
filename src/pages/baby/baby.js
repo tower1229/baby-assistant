@@ -1,6 +1,9 @@
 // pages/baby/baby.js
 const app = getApp()
 const util = require('../../utils/util.js');
+const today = new Date();
+const fiveYearsAgo = new Date(today.getTime() - 5 * (365 * 24 * 60 * 60 * 1000));
+
 let baby;
 
 Page({
@@ -14,7 +17,9 @@ Page({
     photo: '',
     locaAvatFile: wx.getStorageSync('babyAvatCache'),
     picker: ['男', '女'],
-    birthday: '2018-03-19',
+    today: util.formatTime(today),
+    birthday: util.formatTime(today),
+    startDate: util.formatTime(fiveYearsAgo),
     gender: '男',
     weight: null,
     length: null,
@@ -161,6 +166,7 @@ Page({
     }
   },
   onReady: function () {
+    //console.log(this.data.startDate)
     baby = app.globalData.baby;
     if (baby.birthday){
       baby.days = util.computeDays(baby.birthday)

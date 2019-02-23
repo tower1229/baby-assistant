@@ -5,15 +5,15 @@ const formatNumber = n => {
 }
 
 module.exports = {
-  formatTime: date => {
+  formatTime: (date) => {
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()
-    const hour = date.getHours()
-    const minute = date.getMinutes()
-    const second = date.getSeconds()
+    // const hour = date.getHours()
+    // const minute = date.getMinutes()
+    // const second = date.getSeconds()
 
-    return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
+    return [year, month, day].map(formatNumber).join('-') 
   },
   formatTableData: txt => {
     let table = txt.split('\r');
@@ -45,9 +45,14 @@ module.exports = {
           break;
         }
       }
-      let extPercent = parseInt((value - data[levelIndex]) / (data[levelIndex + 1] - data[levelIndex]) * 100) / 100 * (percentLevels[levelIndex + 1] - percentLevels[levelIndex])
+      if (levelIndex){
+        let extPercent = parseInt((value - data[levelIndex]) / (data[levelIndex + 1] - data[levelIndex]) * 100) / 100 * (percentLevels[levelIndex + 1] - percentLevels[levelIndex])
 
-      percent = percentLevels[levelIndex] + extPercent;
+        percent = percentLevels[levelIndex] + extPercent;
+      }else{
+        percent = 0
+      }
+      
     } else {
       //大于中位数
       let levelIndex;
@@ -57,10 +62,14 @@ module.exports = {
           break;
         }
       }
+      if (levelIndex){
+        let extPercent = parseInt((value - data[levelIndex]) / (data[levelIndex + 1] - data[levelIndex]) * 100) / 100 * (percentLevels[levelIndex + 1] - percentLevels[levelIndex])
+
+        percent = percentLevels[levelIndex] + extPercent;
+      }else{
+        percent = 99.9
+      }
       
-      let extPercent = parseInt((value - data[levelIndex]) / (data[levelIndex + 1] - data[levelIndex]) * 100) / 100 * (percentLevels[levelIndex + 1] - percentLevels[levelIndex])
-      
-      percent = percentLevels[levelIndex] + extPercent;
     }
     return parseInt(percent * 100) / 100
   }
