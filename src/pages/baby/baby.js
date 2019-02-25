@@ -149,16 +149,25 @@ Page({
         wx.cloud.downloadFile({
           fileID: this.data.photo,
           success: res => {
-            // 返回临时文件路径
-            console.log(res.tempFilePath)
-            wx.setStorage({
-              key: 'babyAvatCache',
-              data: res.tempFilePath,
+            // 临时文件路径
+            //console.log(res.tempFilePath)
+            wx.saveFile({
+              tempFilePath: res.tempFilePath,
+              success: res => {
+                const savedFilePath = res.savedFilePath;
+                //本地存储路径
+                //console.log(savedFilePath)
+                wx.setStorage({
+                  key: 'babyAvatCache',
+                  data: savedFilePath,
+                })
+                this.setData({
+                  locaAvatFile: savedFilePath
+                }, wx.hideLoading)
+                this.update(true, true);
+              }
             })
-            this.setData({
-              locaAvatFile: res.tempFilePath
-            }, wx.hideLoading )
-            this.update(true, true);
+            
           },
           fail: console.error
         })

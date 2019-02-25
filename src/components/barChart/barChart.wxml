@@ -2,6 +2,7 @@
 <view class='linewrap flex-col'>
   <view class='_cont flex-1 flex-row align-center'>
     <view class='flex-1'>
+      <view class='tipMsg'>中位数 {{median}} CM</view>
       <text class='maintext'>{{baby.length}}</text> CM
       <view class='tipMsg'>
       <!-- [0.1, 1, 3, 5, 10, 15, 25, 50, 75, 85, 90, 95, 97, 99, 99.9] -->

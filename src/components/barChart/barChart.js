@@ -26,6 +26,7 @@ Component({
   data: {
     baby: {},
     percent: 0,
+    median: 0,
     animation: null,
     standards: []
   },
@@ -34,7 +35,7 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    setPercent: function (percent) {
+    setPercent: function (percent, median) {
       const screenWidth = wx.getSystemInfoSync().windowWidth;
       const percentPx = parseInt(screenWidth / 750 * 562.5 / 100 * percent);
       
@@ -42,7 +43,8 @@ Component({
 
       this.setData({
         animation: animation.export(),
-        percent: percent
+        percent: percent,
+        median: median
       })
     },
     fetchData: function () {
@@ -72,7 +74,7 @@ Component({
       if (this.data.baby.birthday) {
         let babyDays = util.computeDays(this.data.baby.birthday);
         let percent = util.computePercent(this.data.baby.length, this.data.standards[babyDays]);
-        this.setPercent(percent)
+        this.setPercent(percent, this.data.standards[babyDays][7])
       } else {
 
       }

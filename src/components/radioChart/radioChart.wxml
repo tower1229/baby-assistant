@@ -6,7 +6,7 @@
   ></image>
   <view class='canvas _pointer' animation='{{animation}}'></view>
   <view class='canvas _layer flex-col justify-center' bindtap='editBaby'>
-    <view>宝宝体重</view>
+    <view>中位数 {{median}} KG</view>
     <view class='_main'>{{baby.weight}} KG</view>
     <view>超过 {{percent}}% 同龄宝宝</view>
   </view>
