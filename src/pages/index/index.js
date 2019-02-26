@@ -23,7 +23,7 @@ Page({
         text: '身高',
         icon: 'rank'
       }, {
-        text: 'BMI',
+          text: 'BMI（胖瘦）',
         icon: 'new'
       }]
     })
