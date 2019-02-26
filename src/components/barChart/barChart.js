@@ -5,6 +5,7 @@ let animation = wx.createAnimation({
   delay: 300,
   timingFunction: 'ease'
 });
+let standards = [];
 
 Component({
   /**
@@ -27,8 +28,7 @@ Component({
     baby: {},
     percent: 0,
     median: 0,
-    animation: null,
-    standards: []
+    animation: null
   },
 
   /**
@@ -59,10 +59,8 @@ Component({
         filePath: filePath[fileName],
         encoding: 'utf-8',
         success: res => {
-          let table = util.formatTableData(res.data);
-          this.setData({
-            standards: table
-          }, this.show)
+          standards = util.formatTableData(res.data);
+          this.show()
         },
         fail: res => {
           console.warn(res.errMsg)
@@ -73,8 +71,8 @@ Component({
     show: function () {
       if (this.data.baby.birthday) {
         let babyDays = util.computeDays(this.data.baby.birthday);
-        let percent = util.computePercent(this.data.baby.length, this.data.standards[babyDays]);
-        this.setPercent(percent, this.data.standards[babyDays][7])
+        let percent = util.computePercent(this.data.baby.length, standards[babyDays]);
+        this.setPercent(percent, standards[babyDays][7])
       } else {
 
       }
