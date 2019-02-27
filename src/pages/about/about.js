@@ -44,11 +44,15 @@ Page({
       }
     })
   },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
+  onShareAppMessage(res) {
+    if (res.from === 'button') {
+      console.log(res.target)
+    }
+    return {
+      title: '宝贝成长助理',
+      path: '/pages/index/index',
+      imageUrl: '/res/img/logo.png'
+    }
+  }
 
 })
