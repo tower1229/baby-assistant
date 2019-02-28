@@ -40,5 +40,5 @@
 </view>
 <!-- 登录loading -->
 <view class='cu-load load-modal' wx:if="{{loadModal}}"> 
-    <view class='gray-text'>登录...</view>
+    <view class='gray-text'>{{loadModal}}...</view>
 </view>

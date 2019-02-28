@@ -98,7 +98,7 @@ Page({
   },
   checkData: function(){
     if(!baby.birthday){
-      baby.birthday = '2018-03-19'
+      baby.birthday = this.data.today
     }
     if (!baby.gender) {
       baby.gender = '男'

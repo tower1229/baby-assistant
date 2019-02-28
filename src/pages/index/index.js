@@ -16,6 +16,7 @@ Page({
   },
   renderMain: function(){
     this.setData({
+      loadModal: false,
       channels: [{
         text: '体重',
         icon: 'footprint'
@@ -45,18 +46,22 @@ Page({
     })
   },
   updateDownloadPercent: function (downFileNumber) {
+    let percent = Math.floor(downFileNumber / app.globalData.fileList.length * 100);
     this.setData({
-      downloadPercent: Math.floor(downFileNumber / app.globalData.fileList.length * 100)
-    }, function () {
-      if (this.data.downloadPercent === 100) {
+      downloadPercent: percent
+    }, () => {
+      if (percent >= 100) {
         this.setData({
           modalVisible: false
         });
         // 保存文件路径信息
-        wx.setStorageSync('storageFileHash', storageFileHash)
         if (Object.keys(storageFileHash).length === app.globalData.fileList.length) {
-          wx.reLaunch({
-            url: 'index'
+          wx.setStorage({
+            key: 'storageFileHash',
+            data: storageFileHash,
+            success: () => {
+              this.checkBaby()
+            }
           })
         }else{
           console.log('客户端问题')
@@ -71,52 +76,76 @@ Page({
       typeof callback === 'function' && callback.call(this, app.globalData.openid)
     }else{
       this.setData({
-        loadModal: true
+        loadModal: '登录'
       })
       wx.cloud.callFunction({
         name: 'login',
-        complete: res => {
+        success: res => {
           app.globalData.openid = res.result.openid;
           this.setData({
             loadModal: false
           })
           typeof callback === 'function' && callback.call(this, app.globalData.openid)
+        },
+        fail: err => {
+          console.warn(err)
+          this.setData({
+            loadModal: false
+          })
         }
       })
     }
-    
   },
-  checkBaby: function(){
+  checkBaby: function () {
+    console.warn('checkBaby')
     // 更新baby数据
-    this.login(function (openid){
+    this.login(openid => {
+      let currentBaby = app.globalData.baby
+      if (currentBaby.birthday && currentBaby.weight && currentBaby.length) {
+        return this.renderMain()
+      }
+      this.setData({
+        loadModal: '加载'
+      })
       app.globalData.db.collection('baby').doc(openid).get({
         success: res => {
-          const baby = res.data; //wx.getStorageSync('baby');
+          const baby = res.data;
           if (baby.birthday && baby.weight && baby.length) {
             app.globalData.baby = baby;
             this.renderMain()
           } else {
-            wx.navigateTo({
-              url: '/pages/baby/baby'
+            this.setData({
+              loadModal: false
+            }, () => {
+              wx.navigateTo({
+                url: '/pages/baby/baby'
+              })
             })
           }
         },
         fail: err => {
+          this.setData({
+            loadModal: false
+          })
+          console.warn('初始化宝宝')
           wx.navigateTo({
             url: '/pages/baby/baby'
           })
         }
       })
     })
-    
   },
   checkData: function () {
     // 检查数据
+    
     wx.getSavedFileList({
       success: (res) => {
-        const filePath = wx.getStorageSync('storageFileHash');
+        const filePath = wx.getStorageSync('storageFileHash') || storageFileHash;
         
         if (Object.keys(filePath).length < app.globalData.fileList.length) {
+          this.setData({
+            modalVisible: true
+          })
           // 清理已下载文件
           res.fileList.forEach(localFile => {
             wx.removeSavedFile({
@@ -127,13 +156,10 @@ Page({
             })
           })
 
-          //初始化数据
+          //下载数据
           const fs = wx.getFileSystemManager();
           let downFileNumber = 0;
-          this.setData({
-            modalVisible: true
-          });
-
+          
           app.globalData.fileList.forEach(remoteFile => {
             wx.downloadFile({
               url: app.globalData.whoHost + remoteFile,
@@ -152,7 +178,7 @@ Page({
                     fail: saveFailRes => {
                       downFileNumber++;
                       this.updateDownloadPercent(downFileNumber)
-                      console.log(saveFailRes.errMsg)
+                      console.err(saveFailRes.errMsg)
                     }
                   })
                 }
@@ -162,18 +188,20 @@ Page({
               }
             })
           })
-
         } else {
           console.log('数据就绪')
           this.checkBaby()
         }
+      },
+      fail: err => {
+        this.setData({
+          loadModal: false
+        })
+        console.warn('获取下载文件失败')
       }
     })
   },
   onShow: function(){
-    this.checkBaby()
-  },
-  onReady: function () {
     this.checkData()
   }
 })
