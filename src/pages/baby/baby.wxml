@@ -9,10 +9,10 @@
 
 <view class="cu-card case {{isCard?'no-card':''}}">
   <view class="cu-item shadow">
-    <view class='image' bindtap='uploadImg'>
-      <image src="{{locaAvatFile}}" mode="aspectFill" style='background:#ccc'></image>
+    <view class='image ' bindtap='uploadImg'>
+      <image src="{{locaAvatFile}}" mode="aspectFill" class='drawnode' style='background:#ccc' data-type="image"></image>
       <view class="cu-tag bg-pink"><text class='icon-crownfill lg text-yellow'></text> 点击换照片</view>
-      <view wx-if="{{days}}" class='cu-bar bg-shadeBottom'>本宝宝健康成长 {{days}} 天啦！</view>
+      <view wx-if="{{days}}" class='cu-bar bg-shadeBottom'>本宝宝健康成长 {{formatDays}} 啦！</view>
     </view>
     <view class="cu-list menu menu-avatar">
       <view class="cu-item" bindtap='edit'>
@@ -38,6 +38,7 @@
   </view>
 
 </view>
+<!-- 填写表单 -->
 <view class="cu-modal {{modalVisible ? 'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
@@ -92,6 +93,27 @@
           <text class='icon-upload'></text> 填好啦</button>
       </view>
     </form>
+  </view>
+</view>
+
+<view class='margin'>
+  <button bindtap='magic' class='button bg-gradual-red'><text class="icon-magic"></text> 生成海报</button>
+</view>
+
+<!-- 离屏canvas -->
+<canvas canvas-id="myCanvas" class="share__canvas"></canvas>
+
+<!-- 海报弹窗 -->
+<view class="cu-modal {{shareImg ? 'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class='content'>已保存到相册</view>
+    </view>
+    <view class='margin' bindtap='closeShareImg'>
+      <image src='{{shareImg}}'
+    style="width: 600rpx; height: 800rpx; background-color: #eeeeee;"
+    ></image>
+    </view>
   </view>
 </view>
 

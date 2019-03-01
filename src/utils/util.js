@@ -29,6 +29,40 @@ module.exports = {
     const days = Math.floor((nowDate.getTime() - birthDate.getTime()) / (24 * 3600 * 1000))
     return days
   },
+  formatDays: birthday => {
+    const birthDate = new Date(birthday)
+    const birthYear = birthDate.getFullYear();
+    const birthMonth = birthDate.getMonth();
+    const birthDay = birthDate.getDate();
+
+    const nowDate = new Date();
+    const nowYear = nowDate.getFullYear();
+    const nowMonth = nowDate.getMonth();
+    const nowDay = nowDate.getDate();
+
+    let babyYears = 0;
+    let babyMonth = 0;
+    let babyDays = 0;
+
+    let yearDistance = nowYear - birthYear;
+    if (yearDistance>=1){
+      if (nowMonth > birthMonth || (nowMonth === birthMonth && (nowDay >= birthDay))){
+        babyYears = yearDistance
+      } else {
+        babyYears = yearDistance - 1
+      }
+    }
+    
+    if (babyYears > 0){
+      birthDate.setFullYear(birthYear + babyYears)
+    }
+
+    const days = Math.floor((nowDate.getTime() - birthDate.getTime()) / (24 * 3600 * 1000))
+    babyMonth = Math.floor(days / 30)
+    babyDays = days % 30
+    
+    return `${babyYears > 0 ? babyYears +'岁' : ''}${babyMonth}个月零${babyDays}天`
+  },
   computePercent: (value, data) => {
     const percentLevels = [0.1, 1, 3, 5, 10, 15, 25, 50, 75, 85, 90, 95, 97, 99, 99.9];
     const centerIndex = 7;

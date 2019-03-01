@@ -47,6 +47,9 @@ Component({
         percent: percent,
         median: median
       })
+      //数据分享到全局
+      app.globalData.bmi = this.data.bmi;
+      app.globalData.bmiPercent = percent;
     },
     fetchData: function () {
       // 计算bmi

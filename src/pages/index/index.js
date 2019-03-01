@@ -3,16 +3,32 @@
 const app = getApp()
 // 下载文件存储位置
 let storageFileHash = {};
+// 用户信息
+let userInfo = {};
+
 
 Page({
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
+    userInfo: userInfo,
     TabCur: 0,
     channels: [],
     downloadPercent: 0,
     modalVisible: false,
     loadModal: false
+  },
+  //授权
+  onGetUserInfo: function (e) {
+    if (e.detail.userInfo) {
+      userInfo = e.detail.userInfo;
+      app.globalData.userInfo = userInfo;
+      this.setData({
+        userInfo: userInfo
+      }, () => {
+        this.checkData()
+      })
+    }
   },
   renderMain: function(){
     this.setData({
@@ -137,7 +153,6 @@ Page({
   },
   checkData: function () {
     // 检查数据
-    
     wx.getSavedFileList({
       success: (res) => {
         const filePath = wx.getStorageSync('storageFileHash') || storageFileHash;
@@ -201,7 +216,35 @@ Page({
       }
     })
   },
+  checkRight: function(callback){
+    if (userInfo && userInfo.nickName){
+      typeof callback === 'function' && callback(userInfo)
+    }else{
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.userInfo']) {
+            console.log('已授权')
+            wx.getUserInfo({
+              success: res => {
+                userInfo = res.userInfo;
+                app.globalData.userInfo = userInfo;
+                this.setData({
+                  userInfo: userInfo
+                })
+                typeof callback === 'function' && callback(userInfo)
+              }
+            })
+          }else{
+            console.log('待授权')
+            this.setData({
+              userInfo: null
+            })
+          }
+        }
+      })
+    }
+  },
   onShow: function(){
-    this.checkData()
+    this.checkRight(this.checkData)
   }
 })

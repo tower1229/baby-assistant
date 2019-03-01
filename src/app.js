@@ -16,9 +16,10 @@ App({
     })
 
     //调试
-    wx.setEnableDebug({
-      enableDebug: false
-    })
+    // wx.setEnableDebug({
+    //   enableDebug: true
+    // })
+
   },
   globalData: {
     userInfo: null,
