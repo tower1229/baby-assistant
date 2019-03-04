@@ -66,15 +66,19 @@ Component({
           console.warn(res.errMsg)
         }
       })
-
     },
     show: function(){
       if (this.data.baby.birthday){
         let babyDays = util.computeDays(this.data.baby.birthday);
+        //检查合法性
+        if (!util.checkLegality('weight', this.data.baby.weight, standards[babyDays][7])) {
+          this.triggerEvent('illegal', 'weight')
+        }
+
         let percent = util.computePercent(this.data.baby.weight, standards[babyDays]);
         this.setPercent(percent, standards[babyDays][7])
       }else{
-        
+        console.warn('没有设置生日')
       }
       
     },

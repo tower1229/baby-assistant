@@ -20,9 +20,9 @@
       current='{{TabCur}}'
       bindanimationfinish="swiperChange">
     <swiper-item wx:for="{{channels}}" wx:key class="scroll_cont ">
-      <radio-chart wx:if="{{index===0}}" current-index="{{TabCur}}" ></radio-chart>
-      <bar-chart wx:if="{{index===1}}" current-index="{{TabCur}}" ></bar-chart>
-      <line-chart wx:if="{{index===2}}" current-index="{{TabCur}}"></line-chart>
+      <radio-chart wx:if="{{index===0}}" current-index="{{TabCur}}" bindillegal="illegalAlert"></radio-chart>
+      <bar-chart wx:if="{{index===1}}" current-index="{{TabCur}}"  bindillegal="illegalAlert"></bar-chart>
+      <line-chart wx:if="{{index===2}}" current-index="{{TabCur}}" bindillegal="illegalAlert"></line-chart>
     </swiper-item>
   </swiper>
 
@@ -57,6 +57,23 @@
       </view>
       <view class='margin-xl'>引用世界卫生组织儿童生长标准数据，辅助衡量宝宝的成长健康状态</view>
       <button class='cu-btn  bg-green shadow lg block' open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">微信登录</button>
+    </view>
+  </view>
+</view>
+<!-- 数据不合法警告 -->
+<view class="cu-modal {{modalAlert ? 'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class='content'>数据异常</view>
+    </view>
+    <view class='padding-xl'>
+      检测到<text class='text-red'>【{{modalAlert}}】</text>数据可能有异常，为保证数据准确性，请检查宝贝信息是否填写正确
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class='action'>
+        <button class='cu-btn line-green text-green' bindtap='tobaby'>确定</button>
+        <button class='cu-btn margin-left' bindtap='hideAlert'>取消</button>
+      </view>
     </view>
   </view>
 </view>

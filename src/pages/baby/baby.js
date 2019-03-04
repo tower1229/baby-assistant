@@ -1,4 +1,3 @@
-import Wxml2Canvas from '../../res/lib/wxml2canvas/index.js';
 const app = getApp()
 const util = require('../../utils/util.js');
 const today = new Date();

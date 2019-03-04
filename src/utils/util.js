@@ -106,5 +106,30 @@ module.exports = {
       
     }
     return parseInt(percent * 100) / 100
+  },
+  checkLegality: (type, value, middle) => {
+    switch (type){
+      case "weight": 
+        if (value < middle/2 || value > middle * 2){
+          return false
+        }
+        return true
+      break;
+      case "length": 
+        if (value < middle / 2 || value > middle * 2) {
+          return false
+        }
+        return true
+      break;
+      case "bmi":
+        if (value < middle / 2 || value > middle * 2) {
+          return false
+        }
+        return true
+      break;
+      default: 
+        console.warn('type 异常')
+        return true
+    }
   }
 }

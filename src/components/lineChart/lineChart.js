@@ -81,6 +81,11 @@ Component({
       if (this.data.baby.birthday) {
         
         let babyDays = util.computeDays(this.data.baby.birthday);
+        //检查合法性
+        if (!util.checkLegality('bmi', this.data.baby.bmi, standards[babyDays][7])) {
+          this.triggerEvent('illegal', 'bmi')
+        }
+        
         let percent = util.computePercent(this.data.bmi, standards[babyDays]);
         this.setPercent(percent, standards[babyDays][7])
       } else {

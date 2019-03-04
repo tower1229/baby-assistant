@@ -16,7 +16,8 @@ Page({
     channels: [],
     downloadPercent: 0,
     modalVisible: false,
-    loadModal: false
+    loadModal: false,
+    modalAlert: false
   },
   //授权
   onGetUserInfo: function (e) {
@@ -46,6 +47,16 @@ Page({
     })
   },
   //事件处理函数
+  illegalAlert: function(e){
+    this.setData({
+      modalAlert: e.detail
+    })
+  }, 
+  hideAlert: function () {
+    this.setData({
+      modalAlert: false
+    })
+  },
   tabSelect(e) {
     this.setData({
       TabCur: e.currentTarget.dataset.id
@@ -58,7 +69,15 @@ Page({
   },
   tointro: function(){
     wx.navigateTo({
-      url: '/pages/about/about',
+      url: '/pages/about/about'
+    })
+  },
+  tobaby: function(){
+    wx.navigateTo({
+      url: '/pages/baby/baby',
+      success: () => {
+        this.hideAlert()
+      }
     })
   },
   updateDownloadPercent: function (downFileNumber) {
