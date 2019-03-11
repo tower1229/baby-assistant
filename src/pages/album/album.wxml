@@ -6,10 +6,10 @@
   </view>
   <view class='headbar flex-row padding'>
     <view class='flex-1 slogon text-sm text-grey'>
-      已使用{{diskUsed}}M，总空间{{diskAll}}M
+      已使用{{diskUsed}}，总空间{{diskAll}}M
       <view class="cu-progress round sm striped margin-top-xs">
-        <view class='bg-red' style="width:{{diskUsed}}%"></view>
-        <view class='bg-green' style="width:{{100-diskUsed}}%"></view>
+        <view class='bg-red' style="width:{{usedPer}}%"></view>
+        <view class='bg-green' style="width:{{100-usedPer}}%"></view>
       </view>
     </view>
     <view class='shot margin-left' bindtap='add'>

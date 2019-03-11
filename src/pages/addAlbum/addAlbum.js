@@ -75,34 +75,55 @@ Page({
     })
   },
   beforeSubmit: function () {
+    //格式检查
+    const checkData = (replace) => {
+      const postData = this.data.formData;
+      const tipErr = function (errmsg) {
+        wx.showToast({
+          title: errmsg,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+      //检查上传状态
+      if (!postData.photos.length) {
+        return tipErr('忘了传照片？')
+      }
+
+      return this.submit(replace)
+    }
     //检查日期重复
+    wx.showLoading({
+      title: '正在准备...',
+    })
     collectionAlbum.where({
       _openid: app.globalData.openid,
-      titleDate: todayDate
+      titleDate: this.data.formData.titleDate
     }).get({
-      success: res => {
-        console.log(res)
+      success: result => {
+        wx.hideLoading()
+        if (result.data.length){
+          wx.showModal({
+            title: '覆盖',
+            content: '当前日期相册已存在，继续操作将覆盖原相册',
+            success(res) {
+              if (res.confirm) {
+                checkData(result.data[0]._id)
+              }
+            }
+          })
+        }else{
+          checkData()
+        }
       },
-      fail: console.error
+      fail: err => {
+        console.error('跳过日期检查', err)
+        checkData()
+      }
     })
-    //检查空间容量
-
-    const postData = this.data.formData;
-    const tipErr = function (errmsg) {
-      wx.showToast({
-        title: errmsg,
-        icon: 'none',
-        duration: 2000
-      })
-    }
-    //检查上传状态
-    if (!postData.photos.length) {
-      return tipErr('忘了传照片？')
-    }
-
-    return this.submit()
+    
   },
-  submit: function () {
+  submit: function (replace) {
     const postData = this.data.formData;
     const puloadQueue = postData.photos.map(e => {
       return wx.cloud.uploadFile({
@@ -114,9 +135,22 @@ Page({
     wx.showLoading({
       title: '正在上传...',
     })
+    //完成并跳转
+    const jump = () => {
+      //重新计算空间
+      wx.cloud.callFunction({
+        name: "disk-space",
+        complete: res => {
+          console.log(res)
+          wx.switchTab({
+            url: '/pages/album/album'
+          })
+        }
+      })
+    }
     Promise.all(puloadQueue).then(results => {
       console.log(app.globalData.openid)
-      //提交数据
+      //组织数据
       wx.showLoading({
         title: '正在提交...',
       })
@@ -126,27 +160,29 @@ Page({
         return results[index].fileID
       });
       postData.size = allSize;
-      postData.timestamp = today.getTime();
+      postData.timestamp = new Date().getTime();
       console.log(postData)
-      //uploadedQueue
-      collectionAlbum.add({
-        data: postData
-      }).then(res => {
-        //重新计算空间
-        wx.cloud.callFunction({
-          name: "disk-space",
-          complete: res => {
-            console.log(res)
-            wx.switchTab({
-              url: '/pages/album/album'
-            })
-          }
+      //提交数据
+      if (replace){
+        collectionAlbum.doc(replace).set({
+          data: postData
+        }).then(res => {
+          jump()
+        }).catch(err => {
+          console.warn(err)
+          wx.hideLoading()
         })
-        
-      }).catch(err => {
-        console.warn(err)
-        wx.hideLoading()
-      })
+      }else{
+        collectionAlbum.add({
+          data: postData
+        }).then(res => {
+          jump()
+        }).catch(err => {
+          console.warn(err)
+          wx.hideLoading()
+        })
+      }
+      
     }).catch(err => {
       console.warn(err)
       wx.hideLoading()

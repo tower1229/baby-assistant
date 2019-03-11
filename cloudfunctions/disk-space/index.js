@@ -3,9 +3,6 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 
-//遍历相册，累加已用空间，
-//写入用户表
-
 // 云函数入口函数
 exports.main = async (event, context) => new Promise((resolve, reject) => {
   const db = cloud.database()
@@ -19,10 +16,13 @@ exports.main = async (event, context) => new Promise((resolve, reject) => {
     _openid: OPENID,
   }).get().then(res => {
     const albums = res.data;
+    
     let diskUsed = 0;
     albums.forEach(e => {
-      diskUsed += parseInt((e.size / 1024) * 10)/10
+      diskUsed += e.size
     })
+    diskUsed = parseInt(diskUsed /1024 * 10) / 10;
+    console.log(`用户${OPENID}共${albums.length}条数据，占用空间${diskUsed}KB`)
     db.collection('user').doc(OPENID).update({
       data: {
         diskUsed

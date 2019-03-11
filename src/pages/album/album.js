@@ -14,7 +14,7 @@ Page({
     albums: [],
     diskUsed: 0,
     diskAll: 0,
-    diskUsed: 0
+    usedPer: 0
   },
   view: function(e){
     const id = e.currentTarget.dataset.id;
@@ -33,6 +33,14 @@ Page({
     }
   },
   add: function () {
+    //检查空间容量
+    if (this.data.usedPer>=100){
+      return wx.showToast({
+        title: '空间已满',
+        icon: 'none',
+        duration: 2000
+      })
+    }
     wx.redirectTo({
       url: '/pages/addAlbum/addAlbum',
     })
@@ -71,12 +79,14 @@ Page({
   checkDisk: function () {
     //取用户数据
     app.globalData.db.collection('user').doc(app.globalData.openid).get().then(res => {
-      const diskUsed = util.fix1(res.data.diskUsed / 1024);
-      const diskAll = util.fix1(res.data.space / 1024);
-      const usedPer = parseInt(res.data.diskUsed / res.data.space * 100) / 100;
+      console.log(res.data)
+      const diskUsed = res.data.diskUsed;
+      const diskAll = res.data.space;
+      const usedPer = parseInt(diskUsed / diskAll * 100) / 100;
+      
       this.setData({
-        diskUsed,
-        diskAll,
+        diskUsed: diskUsed > 1024 ? parseInt(diskUsed / 1024 * 10) / 10 + 'M' : diskUsed + 'KB',
+        diskAll: util.fix1(diskAll / 1024),
         usedPer
       })
     }).catch(err => {
@@ -90,6 +100,7 @@ Page({
   onShow: function(){
     if (app.globalData.openid){
       this.getDoc()
+      this.checkDisk()
     }
    
   }
