@@ -1,0 +1,43 @@
+<view class='cu-custom' style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-pink light" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <navigator class='action' open-type="switchTab" url="/pages/album/album" hover-class="none">
+      <text class='icon-back'></text> {{titleDate}}
+    </navigator>
+  </view>
+</view>
+
+<view class="cu-card dynamic">
+  <view wx:for="1" wx:key class="cu-item ">
+    <view class="cu-list menu menu-avatar">
+      <view class="cu-item">
+        <view class="cu-avatar round lg" style="background-image:url(https://image.weilanwl.com/img/square-1.jpg);"></view>
+        <view class='content flex-sub'>
+          <view>{{titleDate}}</view>
+          <view class='text-gray text-sm flex justify-between'>
+            {{days}}
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class='text-content'>
+      {{description}}
+    </view>
+    <view class="grid padding-lr">
+      <image wx:for="{{photos}}" wx:key 
+        class='myphoto'
+        mode="aspectFill"
+        src="{{item}}"
+        data-src="{{item}}"
+        bindtap='preview'
+      ></image>  
+    </view>
+    <!-- <view class='text-gray text-sm text-right padding'>
+      <text class="icon-attentionfill"></text> 10
+      <text class="icon-appreciatefill"></text> 20
+    </view> -->
+  </view>
+</view>
+
+<view class="margin">
+  <button class='cu-btn block bg-red lg' bindtap='del'><text class='icon-delete'></text>删除</button>
+</view>

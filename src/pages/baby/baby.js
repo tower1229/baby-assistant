@@ -265,24 +265,13 @@ Page({
                   wx.canvasToTempFilePath({
                     canvasId: 'myCanvas',
                     success(res) {
-                      wx.saveImageToPhotosAlbum({
-                        filePath: res.tempFilePath,
-                        success() {
-                          self.setData({
-                            shareImg: res.tempFilePath
-                          }, function(){
-                            wx.hideLoading()
-                          })
-                        },
-                        fail: err => {
-                          wx.hideLoading()
-                          wx.showToast({
-                            title: err.errMsg,
-                            icon: 'none',
-                            duration: 2000
-                          })
-                        }
+                      //生成
+                      return self.setData({
+                        shareImg: res.tempFilePath
+                      }, function () {
+                        wx.hideLoading()
                       })
+                      
                     }
                   })
                 })
@@ -294,7 +283,30 @@ Page({
         }
       })
     }
-    
+  },
+  saveAlbum2Local: function(){
+    //海报存相册
+    let filepath = this.data.shareImg;
+    wx.saveImageToPhotosAlbum({
+      filePath: filepath,
+      success() {
+        wx.showToast({
+          title: '已保存到手机',
+          icon: 'none',
+          duration: 2000
+        })
+      },
+      fail: err => {
+        wx.showToast({
+          title: err.errMsg,
+          icon: 'none',
+          duration: 2000
+        })
+      },
+      complete: () => {
+        this.closeShareImg()
+      }
+    })
   },
   onShow: function(){
     this.setData({

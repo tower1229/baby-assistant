@@ -30,7 +30,7 @@ exports.main = async (event, context) => new Promise((resolve, reject) => {
     let weight = fix2(totalWeight / allDate.length);
     let bmi = fix3(weight / Math.pow(length / 100, 2))
 
-    db.collection('cache').doc('average').set({
+    db.collection('system').doc('average').set({
       data: {
         length,
         weight,

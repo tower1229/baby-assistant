@@ -107,12 +107,21 @@
 <view class="cu-modal {{shareImg ? 'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
-      <view class='content'>已保存到相册</view>
+      <view class='content'>海报已生成</view>
+      <view class='action' bindtap='closeShareImg'>
+        <text class='icon-close text-red'></text>
+      </view>
     </view>
-    <view class='margin' bindtap='closeShareImg'>
+    <view class='margin'>
       <image src='{{shareImg}}'
     style="width: 600rpx; height: 800rpx; background-color: #eeeeee;"
     ></image>
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class='action'>
+        <button class='cu-btn line-green text-green' bindtap='saveAlbum2Local'>保存到相册</button>
+
+      </view>
     </view>
   </view>
 </view>

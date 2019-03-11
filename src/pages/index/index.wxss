@@ -2,5 +2,3 @@ page{height: 100%}
 .nav .cu-item{height:180rpx}
 [class*="icon-"].lg{height:90rpx;line-height: 120rpx; font-size:2.2em;}
 .pageMenu{padding: 0 .5em;color:#fff;font-size: 1.5em;}
-
-.myavat{width:128rpx;height:128rpx;margin:20rpx auto;overflow: hidden;border-radius: 64rpx;background:#eee;}

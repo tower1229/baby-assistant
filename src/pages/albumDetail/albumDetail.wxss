@@ -1,0 +1,1 @@
+.myphoto{width:190rpx;height:190rpx;border-radius:10rpx;margin:0 10rpx 20rpx;box-shadow: 2rpx 2rpx 4rpx rgba(0,0,0,.2);}

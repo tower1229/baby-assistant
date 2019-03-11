@@ -8,9 +8,9 @@
 .flex-wrap { flex-wrap: wrap;}
 /* components/lineChart/lineChart.wxss */
 .linewrap{ height: 100%;}
-.linewrap ._chart{position: relative;width: 750rpx; height:750rpx;}
-.linewrap ._canvas{position: absolute; width: 750rpx; height:750rpx; z-index: 1;}
-.linewrap ._lineWrap{position: absolute;top:0;width:750rpx;height: 562.5rpx;z-index: 2;}
+.linewrap ._chart{position: relative;width: 750rpx; height:656.25rpx;}
+.linewrap ._canvas{position: absolute; width: 100%; height:100%; z-index: 1;}
+.linewrap ._lineWrap{position: absolute;top:0;width:100%;height: 87.5%;z-index: 2;}
 .linewrap ._line{position: absolute;bottom:0;width:100%;text-align: center;border-bottom: 2px dashed #666;padding-bottom: 15rpx;}
 .linewrap ._tag{
 position:relative;

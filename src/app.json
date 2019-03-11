@@ -2,9 +2,12 @@
   "cloud": true,
   "pages": [
     "pages/index/index",
+    "pages/question/question",
     "pages/baby/baby",
-    "components/barChart/barChart",
-    "pages/about/about"
+    "pages/album/album",
+    "pages/about/about",
+    "pages/addAlbum/addAlbum",
+    "pages/albumDetail/albumDetail"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -12,5 +15,31 @@
     "navigationBarTitleText": "宝贝成长助理",
     "navigationStyle": "custom",
     "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#aaa",
+    "selectedColor": "#777",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "/res/img/tabbar/basics.png",
+        "selectedIconPath": "/res/img/tabbar/basics_cur.png",
+        "text": "成长"
+      },
+      {
+        "pagePath": "pages/album/album",
+        "iconPath": "/res/img/tabbar/component.png",
+        "selectedIconPath": "/res/img/tabbar/component_cur.png",
+        "text": "时光"
+      },
+      {
+        "pagePath": "pages/about/about",
+        "iconPath": "/res/img/tabbar/about.png",
+        "selectedIconPath": "/res/img/tabbar/about_cur.png",
+        "text": "关于"
+      }
+    ]
   }
 }

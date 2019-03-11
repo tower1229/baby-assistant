@@ -51,9 +51,9 @@
 					"scene": 1011
 				},
 				{
-					"id": -1,
-					"name": "宝贝信息",
-					"pathName": "pages/baby/baby",
+					"id": 1,
+					"name": "时光相册",
+					"pathName": "pages/album/album",
 					"query": "",
 					"scene": null
 				}

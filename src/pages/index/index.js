@@ -3,15 +3,11 @@
 const app = getApp()
 // 下载文件存储位置
 let storageFileHash = {};
-// 用户信息
-let userInfo = {};
-
 
 Page({
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    userInfo: userInfo,
     TabCur: 0,
     channels: [],
     downloadPercent: 0,
@@ -19,18 +15,7 @@ Page({
     loadModal: false,
     modalAlert: false
   },
-  //授权
-  onGetUserInfo: function (e) {
-    if (e.detail.userInfo) {
-      userInfo = e.detail.userInfo;
-      app.globalData.userInfo = userInfo;
-      this.setData({
-        userInfo: userInfo
-      }, () => {
-        this.checkData()
-      })
-    }
-  },
+
   renderMain: function(){
     this.setData({
       loadModal: false,
@@ -69,7 +54,7 @@ Page({
   },
   tointro: function(){
     wx.navigateTo({
-      url: '/pages/about/about'
+      url: '/pages/question/question'
     })
   },
   tobaby: function(){
@@ -105,75 +90,53 @@ Page({
       }
     })
   },
-  login: function (callback) {
-    //登录
-    if (app.globalData.openid){
-      typeof callback === 'function' && callback.call(this, app.globalData.openid)
-    }else{
-      this.setData({
-        loadModal: '登录'
-      })
-      wx.cloud.callFunction({
-        name: 'login',
-        success: res => {
-          app.globalData.openid = res.result.openid;
-          this.setData({
-            loadModal: false
-          })
-          typeof callback === 'function' && callback.call(this, app.globalData.openid)
-        },
-        fail: err => {
-          console.warn(err)
-          this.setData({
-            loadModal: false
-          })
-        }
-      })
-    }
-  },
+  
   checkBaby: function () {
     console.warn('checkBaby')
     // 更新baby数据
-    this.login(openid => {
-      let currentBaby = app.globalData.baby
-      if (currentBaby.birthday && currentBaby.weight && currentBaby.length) {
-        return this.renderMain()
-      }
-      this.setData({
-        loadModal: '加载'
-      })
-      app.globalData.db.collection('baby').doc(openid).get({
-        success: res => {
-          const baby = res.data;
-          if (baby.birthday && baby.weight && baby.length) {
-            app.globalData.baby = baby;
-            this.renderMain()
-          } else {
-            this.setData({
-              loadModal: false
-            }, () => {
-              wx.navigateTo({
-                url: '/pages/baby/baby'
-              })
-            })
-          }
-        },
-        fail: err => {
+    const openid = app.globalData.openid;
+    let currentBaby = app.globalData.baby
+    if (currentBaby.birthday && currentBaby.weight && currentBaby.length) {
+      return this.renderMain()
+    }
+    this.setData({
+      loadModal: '加载'
+    })
+    app.globalData.db.collection('baby').doc(openid).get({
+      success: res => {
+        const baby = res.data;
+        if (baby.birthday && baby.weight && baby.length) {
+          app.globalData.baby = baby;
+          this.renderMain()
+        } else {
           this.setData({
             loadModal: false
-          })
-          console.warn('初始化宝宝')
-          wx.navigateTo({
-            url: '/pages/baby/baby'
+          }, () => {
+            wx.navigateTo({
+              url: '/pages/baby/baby'
+            })
           })
         }
-      })
+      },
+      fail: err => {
+        this.setData({
+          loadModal: false
+        })
+        console.warn('初始化宝宝')
+        wx.navigateTo({
+          url: '/pages/baby/baby'
+        })
+      }
     })
   },
   checkData: function () {
+    if(!app.globalData.openid){
+      return console.warn(app.globalData.openid, '用户未登录')
+    }
     // 检查数据
     wx.getSavedFileList({
       success: (res) => {
+        //文件映射
         const filePath = wx.getStorageSync('storageFileHash') || storageFileHash;
         
         if (Object.keys(filePath).length < app.globalData.fileList.length) {
@@ -196,7 +159,7 @@ Page({
           
           app.globalData.fileList.forEach(remoteFile => {
             wx.downloadFile({
-              url: app.globalData.whoHost + remoteFile,
+              url: `${app.globalData.host}data/${remoteFile}`,
               success: downloadRes => {
 
                 if (downloadRes.statusCode === 200) {
@@ -235,35 +198,10 @@ Page({
       }
     })
   },
-  checkRight: function(callback){
-    if (userInfo && userInfo.nickName){
-      typeof callback === 'function' && callback(userInfo)
-    }else{
-      wx.getSetting({
-        success: res => {
-          if (res.authSetting['scope.userInfo']) {
-            console.log('已授权')
-            wx.getUserInfo({
-              success: res => {
-                userInfo = res.userInfo;
-                app.globalData.userInfo = userInfo;
-                this.setData({
-                  userInfo: userInfo
-                })
-                typeof callback === 'function' && callback(userInfo)
-              }
-            })
-          }else{
-            console.log('待授权')
-            this.setData({
-              userInfo: null
-            })
-          }
-        }
-      })
-    }
+  loginHandle: function(){
+    this.checkData()
   },
   onShow: function(){
-    this.checkRight(this.checkData)
+    this.checkData()
   }
 })

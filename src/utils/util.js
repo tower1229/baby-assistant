@@ -131,5 +131,11 @@ module.exports = {
         console.warn('type 异常')
         return true
     }
+  },
+  fix1: function(number){
+    return parseInt(number * 10) / 10
+  },
+  fix2: function (number) {
+    return parseInt(number * 100) / 100
   }
 }

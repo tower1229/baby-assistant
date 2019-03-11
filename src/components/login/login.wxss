@@ -1,0 +1,3 @@
+/* components/login/login.wxss */
+
+.myavat{width:128rpx;height:128rpx;margin:20rpx auto;overflow: hidden;border-radius: 64rpx;background:#eee;}

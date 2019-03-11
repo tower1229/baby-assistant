@@ -1,0 +1,44 @@
+<view class='cu-custom' style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-orange " style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <navigator class='action' open-type="switchTab" url="/pages/album/album" hover-class="none">
+      <text class='icon-back'></text> 新的时光
+    </navigator>
+  </view>
+</view>
+
+<form>
+
+  <view class="cu-form-group margin-top">
+    <view class='title'>故事发生在</view>
+    <picker mode="date" value="{{formData.titleDate}}" start="{{startDate}}" end="{{today}}" bindchange="DateChange">
+      <view class="picker">
+        {{formData.titleDate}}
+      </view>
+    </picker>
+  </view>
+  <view class="cu-form-group margin-top">
+    <textarea value='{{formData.description}}'
+    bindinput="updateDesc"
+    placeholder="今天..." maxlength="100" placeholder-class='placeholder'></textarea>
+  </view>
+  <view class="cu-form-group margin-top">
+    <view class="grid col-3 grid-square flex-sub">
+      <view wx:for="{{formData.photos}}" wx:key="src"
+        class="padding-xs bg-img" style="background-image:url({{item.src}});">
+        <view class="cu-tag bg-red close-tag" data-index="{{index}}" bindtap='delPhoto'>
+          <text class='icon-close'></text>
+        </view>
+
+      </view>
+
+      <view class="padding-xs solids" hidden="{{formData.photos.length>=most}}" bindtap="uploadImg">
+        <text class='icon-cameraadd'></text>
+      </view>
+    </view>
+  </view>
+
+  <view class="margin">
+    <button class='cu-btn block bg-orange lg' bindtap='beforeSubmit'>就这样吧，发射</button>
+  </view>
+
+</form>
