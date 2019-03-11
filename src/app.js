@@ -61,6 +61,6 @@ App({
       'wfa_boys_p_exp.txt',
       'wfa_girls_p_exp.txt'
     ],
-    baby: {}
+    baby: null
   }
 })

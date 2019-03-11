@@ -12,13 +12,11 @@ Page({
     channels: [],
     downloadPercent: 0,
     modalVisible: false,
-    loadModal: false,
     modalAlert: false
   },
 
   renderMain: function(){
     this.setData({
-      loadModal: false,
       channels: [{
         text: '体重',
         icon: 'footprint'
@@ -94,40 +92,35 @@ Page({
   checkBaby: function () {
     console.warn('checkBaby')
     // 更新baby数据
-    const openid = app.globalData.openid;
-    let currentBaby = app.globalData.baby
-    if (currentBaby.birthday && currentBaby.weight && currentBaby.length) {
-      return this.renderMain()
-    }
-    this.setData({
-      loadModal: '加载'
-    })
-    app.globalData.db.collection('baby').doc(openid).get({
-      success: res => {
-        const baby = res.data;
-        if (baby.birthday && baby.weight && baby.length) {
-          app.globalData.baby = baby;
-          this.renderMain()
-        } else {
-          this.setData({
-            loadModal: false
-          }, () => {
+    let baby = app.globalData.baby
+    if (baby && baby.birthday && baby.weight && baby.length) {
+      this.renderMain()
+    }else{
+      wx.showLoading({
+        title: '正在更新信息',
+      })
+      app.globalData.db.collection('baby').doc(app.globalData.openid).get({
+        success: res => {
+          wx.hideLoading()
+          baby = res.data;
+          //console.log('宝贝信息已更新')
+          if (baby.birthday && baby.weight && baby.length) {
+            app.globalData.baby = baby;
+            this.renderMain()
+          }else{
             wx.navigateTo({
               url: '/pages/baby/baby'
             })
-          })
+          }
+        },
+        fail: err => {
+          wx.hideLoading()
+          console.error(err)
         }
-      },
-      fail: err => {
-        this.setData({
-          loadModal: false
-        })
-        console.warn('初始化宝宝')
-        wx.navigateTo({
-          url: '/pages/baby/baby'
-        })
-      }
-    })
+      })
+     
+    }
+    
   },
   checkData: function () {
     if(!app.globalData.openid){
@@ -191,9 +184,6 @@ Page({
         }
       },
       fail: err => {
-        this.setData({
-          loadModal: false
-        })
         console.warn('获取下载文件失败')
       }
     })

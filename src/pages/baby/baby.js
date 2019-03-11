@@ -314,23 +314,46 @@ Page({
     })
   },
   onReady: function () {
-    baby = app.globalData.baby;
+    const initBaby = () => {
+      if (baby.birthday) {
+        baby.formatDays = util.formatDays(baby.birthday)
+      }
 
-    if (baby.birthday) {
-      baby.formatDays = util.formatDays(baby.birthday)
-    }
-
-    this.setData({
-      ...baby
-    }, function(){
-      this.setAvatCache()
-    })
-
-    if (!this.checkData()) {
       this.setData({
-        modalVisible: true
+        ...baby
+      }, function () {
+        this.setAvatCache()
       })
-    }
 
+      if (!this.checkData()) {
+        this.setData({
+          modalVisible: true
+        })
+      }
+    }
+    baby = app.globalData.baby;
+    if (baby) {
+      console.log('宝贝信息已存在')
+      initBaby()
+    }else{
+      wx.showLoading({
+        title: '正在更新信息',
+      })
+      app.globalData.db.collection('baby').doc(app.globalData.openid).get({
+        success: res => {
+          wx.hideLoading()
+          baby = res.data;
+          app.globalData.baby = baby;
+          console.log('宝贝信息已更新')
+          initBaby()
+        },
+        fail: err => {
+          wx.hideLoading()
+          console.error(err)
+        }
+      })
+
+    }
+    
   }
 })
