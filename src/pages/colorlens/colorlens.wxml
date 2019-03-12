@@ -1,0 +1,26 @@
+<view class='cu-custom' style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-orange" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <navigator class='action' open-type="switchTab" url="/pages/album/album" hover-class="none">
+      <text class='icon-back'></text> 调色板
+    </navigator>
+  </view>
+</view>
+
+<view class="cu-form-group margin-top">
+  <view class="grid col-3 grid-square flex-sub">
+
+    <view wx:for="{{list}}" wx:key="name" 
+      class="padding-xs bg-img {{item.name===themeName ? 'selected' : ''}}" style="background-image:url({{item.bgsrc}});"
+      data-theme="{{item.name}}"
+      bindtap='chooseTheme'>
+      <view class="cu-tag">
+        {{item.title}}
+      </view>
+    </view>
+
+  </view>
+</view>
+
+<view class="margin">
+  <button class='cu-btn block bg-orange lg' bindtap='save'>保存</button>
+</view>

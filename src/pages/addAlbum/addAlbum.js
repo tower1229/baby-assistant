@@ -185,7 +185,11 @@ Page({
       
     }).catch(err => {
       console.warn(err)
-      wx.hideLoading()
+      wx.showToast({
+        title: err.errMsg,
+        icon: 'none',
+        duration: 2000
+      })
     })
 
   }

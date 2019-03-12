@@ -1,4 +1,3 @@
-<!--pages/baby/baby.wxml-->
 <view class='cu-custom' style="height:{{CustomBar}}px;">
   <view class="cu-bar fixed bg-pink light" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
     <navigator class='action' open-type="switchTab" url="/pages/index/index" hover-class="none">

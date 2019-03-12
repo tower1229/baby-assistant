@@ -29,13 +29,16 @@ module.exports = {
     const days = Math.floor((nowDate.getTime() - birthDate.getTime()) / (24 * 3600 * 1000))
     return days
   },
-  formatDays: birthday => {
+  formatDays: (birthday, today) => {
+    if (!birthday){
+      return ''
+    }
     const birthDate = new Date(birthday)
     const birthYear = birthDate.getFullYear();
     const birthMonth = birthDate.getMonth();
     const birthDay = birthDate.getDate();
 
-    const nowDate = new Date();
+    const nowDate = today ? new Date(today) : new Date();
     const nowYear = nowDate.getFullYear();
     const nowMonth = nowDate.getMonth();
     const nowDay = nowDate.getDate();

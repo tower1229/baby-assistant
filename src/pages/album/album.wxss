@@ -1,8 +1,11 @@
-page{height:100%; background:url(https://weapp.refined-x.com/img/album-b.png) 0 0 repeat;background-size: 50% auto;}
+page{height:100%; background-color:#eee;}
+.pageMenu{padding: 0 .5em;color:#fff;font-size: 1.5em;}
 .nodata{width:720rpx;height: 580rpx;background:url(https://weapp.refined-x.com/img/album-nodata.png) no-repeat;background-size:contain;
 margin: 50rpx auto 0;}
 /* headbar */
+.headbar{position: relative;z-index: 9; background:#fff;box-shadow: 0 3rpx 3rpx rgba(0,0,0,.2)}
 .headbar .shot{position: relative; width:100rpx;height: 100rpx;}
+.headbar .shot text{position: absolute;bottom: 16rpx;left:0;font-size:24rpx;color:#666;}
 .shot ._sun{width:60rpx;height:60rpx;animation:sunjump 8s infinite;}
 .shot ._cloud{position: absolute;right:0;bottom:0;width:80rpx;height: 80rpx;}
 @keyframes sunjump
@@ -15,17 +18,25 @@ margin: 50rpx auto 0;}
   100% {transform: rotate(0);}
 }
 
-.headbar .slogon{height: 75rpx; overflow: hidden; }
+.headbar .tips{height: 50rpx; line-height: 50rpx; overflow: hidden; }
+
 .cu-timeline{background:none;overflow: auto;}
-.photos-wrap{width:690rpx;height: 483rpx;margin:auto;background:url(https://weapp.refined-x.com/img/album-border.png) no-repeat;
-background-size: 100% auto;box-sizing: border-box;padding-top: 118rpx;}
-.thumbs{position: relative; width: 520rpx; height: 322rpx; margin-left: -510rpx;border-radius: 6rpx;box-shadow: 4rpx 4rpx 8rpx rgba(0,0,0,.2)}
-.thumbs.eq-0{margin-left: 73rpx;}
-
 .cu-timeline>.cu-item::after, .cu-timeline>.cu-item::before{display: none;}
-.cu-timeline>.cu-item {padding:0;margin:0 30rpx 60rpx;background:#fff;}
+.cu-timeline>.cu-item {padding:0;margin:30rpx ;background:rgba(255,255,255,.9);border-radius: 10rpx;overflow: hidden}
 
-.cu-timeline>.cu-item>.content:not([class*="bg-"]){min-height: 138rpx;background-image:url(https://weapp.refined-x.com/img/album-title-b.png);
-background-size: auto 100%; background-repeat:  no-repeat; box-sizing: border-box;padding-top:45rpx;}
-.album-title{font-size:36rpx;line-height: 1.5; font-weight: bold;}
-.album-title ._title{white-space: nowrap;overflow: hidden;margin-left:35rpx;}
+.cu-timeline>.cu-item>.content:not([class*="bg-"]){background: none;}
+
+.cu-timeline .content ._hd{height: 138rpx;background:url(https://weapp.refined-x.com/img/album-title-b.png) 0 0 no-repeat;
+background-size: auto 138rpx; box-sizing: border-box;padding-top:40rpx;}
+.album-title{font-size:36rpx;line-height: 1.5; font-weight: bold;padding-left: 40rpx;}
+.photos-wrap{text-align: center; background:#f5f5f5;background-size: 100% auto; padding: 30rpx;}
+.thumbs{position: relative; width: 510rpx; height: 322rpx; margin-left: -500rpx;border-radius: 6rpx;box-shadow: 4rpx 4rpx 4rpx rgba(0,0,0,.2);
+background:#fff;}
+.thumbs.eq-0{margin-left: 0;}
+/* theme */
+.cu-timeline.theme1{background:url(https://weapp.refined-x.com/img/theme/album-b-1.jpeg) center 0 repeat;background-size: 50% auto;}
+.cu-timeline.theme2{background:url(https://weapp.refined-x.com/img/theme/album-b-2.jpeg) center 0 repeat;background-size: 100% auto;}
+.cu-timeline.theme3{background:url(https://weapp.refined-x.com/img/theme/album-b-3.jpeg) center 0 repeat;background-size: 100% auto;}
+.cu-timeline.theme4{background:url(https://weapp.refined-x.com/img/theme/album-b-4.jpeg) center 0 repeat;background-size: 100% auto;}
+.cu-timeline.theme5{background:url(https://weapp.refined-x.com/img/theme/album-b-5.jpeg) center 0 repeat;background-size: 100% auto;}
+.cu-timeline.theme6{background:url(https://weapp.refined-x.com/img/theme/album-b-6.jpeg) center 0 repeat;background-size: 100% auto;}

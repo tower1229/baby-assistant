@@ -1,12 +1,15 @@
 <view class='flex-col' style='height:100%'>
   <view class='cu-custom' style="height:{{CustomBar}}px;">
     <view class="cu-bar fixed bg-orange " style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+      <view class='pageMenu' bindtap='colorlens'>
+        <text class='icon-colorlens'></text>
+      </view>
       <view class='content'>时光相册</view>
     </view>
   </view>
   <view class='headbar flex-row padding'>
-    <view class='flex-1 slogon text-sm text-grey'>
-      已使用{{diskUsed}}，总空间{{diskAll}}M
+    <view class='flex-1 text-sm text-grey'>
+      <view class='tips'>已使用{{diskUsed}}，总空间{{diskAll}}M</view>
       <view class="cu-progress round sm striped margin-top-xs">
         <view class='bg-red' style="width:{{usedPer}}%"></view>
         <view class='bg-green' style="width:{{100-usedPer}}%"></view>
@@ -23,28 +26,32 @@
         mode="aspectFit"
         src="https://weapp.refined-x.com/img/cloud.png"
       ></image>
+      <text>添加</text>
     </view>
   </view>
-  <view class="cu-timeline flex-1">
+  <view class="cu-timeline flex-1 {{themeName}}">
   <!-- 列表开始 -->
-    <view wx:for="{{albums}}" wx:key="timestamp" class="cu-item text-orange" bindtap='view' data-id='{{item._id}}'>
+    <view wx:for="{{albums}}" wx:key="timestamp" class="cu-item text-orange " bindtap='view' data-id='{{item._id}}'>
       <view class="content">
-        <view class="flex-row ">
+        <view class="flex-row _hd">
           <view class="flex-1 album-title">
-            <view class='_title'>{{item.titleDate}}</view>
+            {{item.titleDate}}
           </view>
-          <view class="cu-tag sm line-orange">{{item.days}}</view>
+          <view hidden='{{!item.days}}' class="cu-tag sm line-orange">{{item.days}}</view>
         </view>
-        <view>{{item.description}}</view>
+        <view class='text-lg'>
+          {{item.description}}
+        </view>
+        <view class='margin-top photos-wrap'>
+          <image wx:for="{{item.photos}}" wx:for-item="photo" wx:key="{{photo}}"
+            class='thumbs eq-{{index}}'
+            style='z-index: {{10-index}};'
+            mode="aspectFill"
+            src="{{photo}}"
+          ></image>
+        </view>
       </view>
-      <view class='photos-wrap'>
-        <image wx:for="{{item.photos}}" wx:for-item="photo" wx:key="{{photo}}"
-          class='thumbs eq-{{index}}'
-          style='z-index: {{10-index}};'
-          mode="aspectFill"
-          src="{{photo}}"
-        ></image>
-      </view>
+      
     </view>
     <view wx:if="{{!albums.length}}" class='nodata'></view>
   </view>

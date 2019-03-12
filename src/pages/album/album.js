@@ -14,7 +14,13 @@ Page({
     albums: [],
     diskUsed: 0,
     diskAll: 0,
-    usedPer: 0
+    usedPer: 0,
+    themeName: wx.getStorageSync('themeName')
+  },
+  colorlens: function(){
+    wx.navigateTo({
+      url: '/pages/colorlens/colorlens',
+    })
   },
   view: function(e){
     const id = e.currentTarget.dataset.id;
@@ -57,7 +63,7 @@ Page({
       success: res => {
         //扩展天数
         const renderData = res.data.map(e => {
-          e.days = util.formatDays(e.titleDate)
+          e.days = app.globalData.baby ? util.formatDays(app.globalData.baby.birthday, e.titleDate) : ''
           return e
         })
         //渲染
@@ -76,31 +82,37 @@ Page({
       }
     })
   },
-  checkDisk: function () {
+  checkUserSet: function () {
     //取用户数据
-    app.globalData.db.collection('user').doc(app.globalData.openid).get().then(res => {
-      console.log(res.data)
-      const diskUsed = res.data.diskUsed;
-      const diskAll = res.data.space;
+    wx.cloud.callFunction({
+      name: 'getMySet'
+    }).then(res => {
+      console.log(res.result)
+      const diskUsed = res.result.diskUsed;
+      const diskAll = res.result.space;
       const usedPer = parseInt(diskUsed / diskAll * 100) / 100;
+      //主题
+      const themeName = res.result.themeName || 'theme1';
+      wx.setStorageSync('themeName', themeName);
       
       this.setData({
         diskUsed: diskUsed > 1024 ? parseInt(diskUsed / 1024 * 10) / 10 + 'M' : diskUsed + 'KB',
         diskAll: util.fix1(diskAll / 1024),
-        usedPer
+        usedPer,
+        themeName
       })
     }).catch(err => {
-      console.warn(err)
+      console.warn('用户设置获取异常', err)
     })
   },
   loginHandle: function () {
     this.getDoc()
-    this.checkDisk()
+    this.checkUserSet()
   },
   onShow: function(){
     if (app.globalData.openid){
       this.getDoc()
-      this.checkDisk()
+      this.checkUserSet()
     }
    
   }

@@ -1,4 +1,3 @@
-// src/pages/about/about.js
 const app = getApp()
 
 Page({

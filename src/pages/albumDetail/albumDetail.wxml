@@ -10,7 +10,9 @@
   <view wx:for="1" wx:key class="cu-item ">
     <view class="cu-list menu menu-avatar">
       <view class="cu-item">
-        <view class="cu-avatar round lg" style="background-image:url(https://image.weilanwl.com/img/square-1.jpg);"></view>
+        <view class="cu-avatar round lg" style='overflow:hidden'>
+          <open-data type="userAvatarUrl" style="width:100%;height:100%"></open-data>
+        </view>
         <view class='content flex-sub'>
           <view>{{titleDate}}</view>
           <view class='text-gray text-sm flex justify-between'>
@@ -19,7 +21,7 @@
         </view>
       </view>
     </view>
-    <view class='text-content'>
+    <view class='text-content text-lg'>
       {{description}}
     </view>
     <view class="grid padding-lr">
@@ -31,13 +33,9 @@
         bindtap='preview'
       ></image>  
     </view>
-    <!-- <view class='text-gray text-sm text-right padding'>
-      <text class="icon-attentionfill"></text> 10
-      <text class="icon-appreciatefill"></text> 20
-    </view> -->
+    <view class='text-gray text-sm text-right padding'>
+      <button class='cu-btn line-red' bindtap='del'><text class='icon-delete'></text>删除</button>
+      <!-- <text class="icon-appreciatefill"></text> 20 -->
+    </view>
   </view>
-</view>
-
-<view class="margin">
-  <button class='cu-btn block bg-red lg' bindtap='del'><text class='icon-delete'></text>删除</button>
 </view>
