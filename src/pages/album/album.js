@@ -90,7 +90,7 @@ Page({
       console.log(res.result)
       const diskUsed = res.result.diskUsed;
       const diskAll = res.result.space;
-      const usedPer = parseInt(diskUsed / diskAll * 100) / 100;
+      const usedPer = parseInt(diskUsed / diskAll * 100);
       //主题
       const themeName = res.result.themeName || 'theme1';
       wx.setStorageSync('themeName', themeName);
