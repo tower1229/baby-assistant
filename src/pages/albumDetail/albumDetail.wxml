@@ -1,5 +1,5 @@
 <view class='cu-custom' style="height:{{CustomBar}}px;">
-  <view class="cu-bar fixed bg-pink light" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+  <view class="cu-bar fixed bg-orange" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
     <navigator class='action' open-type="switchTab" url="/pages/album/album" hover-class="none">
       <text class='icon-back'></text> {{titleDate}}
     </navigator>
@@ -21,7 +21,7 @@
         </view>
       </view>
     </view>
-    <view class='text-content text-lg'>
+    <view class='text-content'>
       {{description}}
     </view>
     <view class="grid padding-lr">

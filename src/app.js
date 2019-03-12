@@ -17,7 +17,7 @@ App({
         });
         updateManager.onUpdateFailed(function () {
           wx.showModal({// 新的版本下载失败
-            title: '已经有新版本了哟~',
+            title: '更新提示',
             content: '新版本已经上线啦~，请您删除当前小程序，重新搜索打开',
           })
         })

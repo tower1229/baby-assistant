@@ -1,1 +1,2 @@
 .myphoto{width:190rpx;height:190rpx; margin:0 10rpx 20rpx;box-shadow: 2rpx 2rpx 4rpx rgba(0,0,0,.2);}
+.cu-card.dynamic>.cu-item>.text-content{font-size:32rpx;}
