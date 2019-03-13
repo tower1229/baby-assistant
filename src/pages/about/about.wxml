@@ -1,9 +1,28 @@
 <!--pages/baby/baby.wxml-->
 <view class='cu-custom' style="height:{{CustomBar}}px;">
   <view class="cu-bar fixed bg-green " style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
-    <view class='content'>成长助理</view>
+    <view class='content'>关于</view>
   </view>
 </view>
+
+<view class="cu-list menu">
+  <view class="cu-item">
+    <view class='content'>
+      <text class='icon-favor text-grey'></text>
+      <text class='text-grey'>关于宝贝成长助理</text>
+    </view>
+  </view>
+  <view class="cu-list menu">
+    <view class="cu-item">
+      <view class='content'>
+        <view class='text-grey padding'>【宝贝成长助理】是一款专注新生儿至5岁以内宝宝健康成长的小程序，功能会随着使用不断增加和改良.目前还处在密集开发阶段，有任何功能建议，都可以点击页面下方按钮反馈给开发者。</view>
+        <view class='text-grey padding'>云服务由【微信小程序·云开发】提供。</view>
+        
+      </view>
+    </view>
+  </view>
+</view>
+
 <view class="cu-list menu">
   <view class="cu-item">
     <view class='content'>
@@ -22,14 +41,12 @@
           <text class='icon-vip text-red'></text> 一个宝爸</view>
       </view>
       <view class='action'>
-        <button class='cu-btn round line-green shadow' bindtap='copylinkurl' data-link="DoWhatILike">加微信</button>
+        <button class='cu-btn line-green' bindtap='copylinkurl' data-link="DoWhatILike">加微信</button>
       </view>
     </view>
-
   </view>
 </view>
-
-<view class='margin-top'>
+<view>
   <official-account binderror="accounterror"></official-account>
 </view>
 
@@ -62,5 +79,4 @@
       <button class='cu-btn block bg-red margin-tb-sm lg' open-type='feedback'><text class='icon-evaluate'></text> 反馈与建议</button>
     </view>
   </view>
-
 </view>
