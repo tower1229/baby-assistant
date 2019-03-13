@@ -47,7 +47,7 @@ Page({
         duration: 2000
       })
     }
-    wx.redirectTo({
+    wx.navigateTo({
       url: '/pages/addAlbum/addAlbum',
     })
   },
