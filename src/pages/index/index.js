@@ -99,23 +99,20 @@ Page({
       wx.showLoading({
         title: '正在更新信息',
       })
-      app.globalData.db.collection('baby').doc(app.globalData.openid).get({
+      wx.cloud.callFunction({
+        name: 'get-baby',
         success: res => {
+          console.log(res)
           wx.hideLoading()
-          baby = res.data;
-          //console.log('宝贝信息已更新')
+          baby = res.result;
           if (baby.birthday && baby.weight && baby.length) {
             app.globalData.baby = baby;
             this.renderMain()
-          }else{
+          } else {
             wx.navigateTo({
               url: '/pages/baby/baby'
             })
           }
-        },
-        fail: err => {
-          wx.hideLoading()
-          console.error(err)
         }
       })
      
@@ -174,7 +171,19 @@ Page({
                 }
               },
               fail: downloadFailRes => {
-                console.warn('下载失败')
+                wx.showModal({
+                  title: '下载失败',
+                  content: '点击"确定"将重新初始化数据',
+                  success(res) {
+                    if (res.confirm) {
+                      wx.removeStorageSync('storageFileHash');
+                      wx.reLaunch({
+                        url: '/pages/index/index'
+                      })
+                    }
+                  }
+                })
+                
               }
             })
           })

@@ -15,7 +15,7 @@
   <view class="cu-list menu">
     <view class="cu-item">
       <view class='content'>
-        <view class='text-grey padding'>【宝贝成长助理】是一款专注新生儿至5岁以内宝宝健康成长的小程序，功能会随着使用不断增加和改良.目前还处在密集开发阶段，有任何功能建议，都可以点击页面下方按钮反馈给开发者。</view>
+        <view class='text-grey padding'>【宝贝成长助理】是一款专注新生儿至5岁以内宝宝健康成长的小程序，功能会随着使用不断增加和改良。目前还处在密集开发阶段，有任何功能建议，都可以点击页面下方按钮反馈给开发者。</view>
         <view class='text-grey padding'>云服务由【微信小程序·云开发】提供。</view>
         
       </view>

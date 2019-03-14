@@ -1,6 +1,7 @@
 const app = getApp()
 const util = require('../../utils/util.js');
 const today = new Date();
+const todayFormat = util.formatTime(today)
 const fiveYearsAgo = new Date(today.getTime() - 5 * (365 * 24 * 60 * 60 * 1000));
 
 let baby;
@@ -22,8 +23,8 @@ Page({
     photo: '',
     locaAvatFile: '',
     picker: ['男', '女'],
-    today: util.formatTime(today),
-    birthday: util.formatTime(today),
+    today: todayFormat,
+    birthday: todayFormat,
     startDate: util.formatTime(fiveYearsAgo),
     gender: '男',
     weight: null,
@@ -120,17 +121,18 @@ Page({
     delete baby._id;
     delete baby._openid;
     delete baby.formatDays;
-
-    app.globalData.db.collection('baby').doc(app.globalData.openid).set({
+    wx.cloud.callFunction({
+      name: 'set-baby',
       data: baby,
       success: res => {
-        console.log('同步成功')
+        console.log('同步成功', res)
         typeof callback === 'function' && callback.call(this)
       },
       fail: err => {
         console.warn(err)
       }
     })
+    
   },
   update: function (e, jumpCheck) {
     //验证
@@ -317,14 +319,14 @@ Page({
     const initBaby = () => {
       if (baby.birthday) {
         baby.formatDays = util.formatDays(baby.birthday)
+        this.setData({
+          ...baby
+        }, function () {
+          this.setAvatCache()
+        })
+
       }
-
-      this.setData({
-        ...baby
-      }, function () {
-        this.setAvatCache()
-      })
-
+      
       if (!this.checkData()) {
         this.setData({
           modalVisible: true
@@ -333,23 +335,20 @@ Page({
     }
     baby = app.globalData.baby;
     if (baby) {
-      console.log('宝贝信息已存在')
+      console.log('baby信息', baby)
       initBaby()
     }else{
       wx.showLoading({
         title: '正在更新信息',
       })
-      app.globalData.db.collection('baby').doc(app.globalData.openid).get({
+      wx.cloud.callFunction({
+        name: 'get-baby',
         success: res => {
+          console.log(res)
           wx.hideLoading()
-          baby = res.data;
+          baby = res.result;
           app.globalData.baby = baby;
-          console.log('宝贝信息已更新')
           initBaby()
-        },
-        fail: err => {
-          wx.hideLoading()
-          console.error(err)
         }
       })
 
