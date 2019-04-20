@@ -10,9 +10,9 @@ Page({
     CustomBar: app.globalData.CustomBar,
     TabCur: 0,
     channels: [],
+    showTips: false,
     downloadPercent: 0,
-    modalVisible: false,
-    modalAlert: false
+    modalVisible: false
   },
 
   renderMain: function(){
@@ -29,17 +29,20 @@ Page({
       }]
     })
   },
-  //事件处理函数
+  //不合法数据提示
   illegalAlert: function(e){
-    this.setData({
-      modalAlert: e.detail
+    const tipHash = {
+      weight: '体重',
+      length: '身高',
+      bmi: 'BMI'
+    }
+    wx.showToast({
+      title: `【${tipHash[e.detail]}】 数据与同龄宝宝差异较大，请检查信息是否填写正确`,
+      icon: 'none',
+      duration: 8000
     })
+    
   }, 
-  hideAlert: function () {
-    this.setData({
-      modalAlert: false
-    })
-  },
   tabSelect(e) {
     this.setData({
       TabCur: e.currentTarget.dataset.id
@@ -109,9 +112,22 @@ Page({
             app.globalData.baby = baby;
             this.renderMain()
           } else {
-            wx.navigateTo({
-              url: '/pages/baby/baby'
+            wx.showModal({
+              title: '欢迎你来！',
+              content: '请先完善宝宝信息',
+              success: res => {
+                if (res.confirm) {
+                  wx.navigateTo({
+                    url: '/pages/baby/baby'
+                  })
+                } else if (res.cancel) {
+                  this.setData({
+                    showTips: true
+                  })
+                }
+              }
             })
+            
           }
         }
       })
@@ -120,6 +136,9 @@ Page({
     
   },
   checkData: function () {
+    this.setData({
+      showTips: false
+    })
     if(!app.globalData.openid){
       return console.warn(app.globalData.openid, '用户未登录')
     }

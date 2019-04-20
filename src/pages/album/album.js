@@ -63,7 +63,14 @@ Page({
       success: res => {
         //扩展天数
         const renderData = res.data.map(e => {
-          e.days = app.globalData.baby ? util.formatDays(app.globalData.baby.birthday, e.titleDate) : ''
+          e.days = app.globalData.baby ? util.formatDays(app.globalData.baby.birthday, e.titleDate) : '';
+          e.albums = e.photos.map((src,index) => {
+            if(index>0){
+              return '/res/img/fff.png'
+            }else{
+              return src
+            }
+          })
           return e
         })
         //渲染

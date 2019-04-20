@@ -16,17 +16,22 @@
       </view>
     </view>
   </scroll-view>
-  <swiper class="screen-swiper flex-1"
-      current='{{TabCur}}'
-      bindanimationfinish="swiperChange">
-    <swiper-item wx:for="{{channels}}" wx:key class="scroll_cont ">
-      <radio-chart wx:if="{{index===0}}" current-index="{{TabCur}}" bindillegal="illegalAlert"></radio-chart>
-      <bar-chart wx:if="{{index===1}}" current-index="{{TabCur}}"  bindillegal="illegalAlert"></bar-chart>
-      <line-chart wx:if="{{index===2}}" current-index="{{TabCur}}" bindillegal="illegalAlert"></line-chart>
-    </swiper-item>
-  </swiper>
-
+  <view class="screen-swiper flex-1">
+    <swiper wx:if="{{channels.length > 0}}"
+        current='{{TabCur}}'
+        class="my-swiper"
+        bindanimationfinish="swiperChange">
+      <swiper-item wx:for="{{channels}}" wx:key>
+        <chart-weight wx:if="{{index===0}}" current-index="{{TabCur}}" bindillegal="illegalAlert"></chart-weight>
+        <chart-height wx:if="{{index===1}}" current-index="{{TabCur}}"  bindillegal="illegalAlert"></chart-height>
+        <chart-bmi wx:if="{{index===2}}" current-index="{{TabCur}}" bindillegal="illegalAlert"></chart-bmi>
+      </swiper-item>
+    </swiper>
+  </view>
+  
+  
 </view>
+
 <!-- 初始化数据 -->
 <view class="cu-modal {{modalVisible ? 'show':''}}">
   <view class="cu-dialog">
@@ -38,21 +43,15 @@
     </view>
   </view>
 </view>
-
-<!-- 数据不合法警告 -->
-<view class="cu-modal {{modalAlert ? 'show':''}}">
+<!-- 完善信息 -->
+<view class="cu-modal {{showTips ? 'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
-      <view class='content'>数据异常</view>
+      <view class='content'>马上开始</view>
     </view>
     <view class='padding-xl'>
-      检测到<text class='text-red'>【{{modalAlert}}】</text>数据可能有异常，为保证数据准确性，请检查宝贝信息是否填写正确
-    </view>
-    <view class="cu-bar bg-white justify-end">
-      <view class='action'>
-        <button class='cu-btn line-green text-green' bindtap='tobaby'>确定</button>
-        <button class='cu-btn margin-left' bindtap='hideAlert'>取消</button>
-      </view>
+      <view>开始之前，先来完善宝宝信息吧！</view>
+      <button class='cu-btn bg-green' bindtap='tobaby'>去完善</button>
     </view>
   </view>
 </view>

@@ -8,7 +8,6 @@ const fiveYearsAgo = new Date(today.getTime() - 5 * (365 * 24 * 60 * 60 * 1000))
 const collectionAlbum = app.globalData.db.collection('album');
 
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -49,6 +48,7 @@ Page({
       sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
       success: res => {
+        console.log(res.tempFilePaths)
         let oData = this.data.formData.photos;
         let picked = res.tempFiles;
         //数量控制
@@ -66,7 +66,7 @@ Page({
             src: tempFile.path
           }
         }))
-
+        
         this.setData({
           "formData.photos": oData
         })

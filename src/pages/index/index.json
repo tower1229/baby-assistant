@@ -1,8 +1,9 @@
 {
   "usingComponents": {
     "login": "/components/login/login",
-    "radio-chart": "/components/radioChart/radioChart",
-    "bar-chart": "/components/barChart/barChart",
-    "line-chart": "/components/lineChart/lineChart"
-  }
+    "chart-weight": "/components/chart-weight/chart-weight",
+    "chart-height": "/components/chart-height/chart-height",
+    "chart-bmi": "/components/chart-bmi/chart-bmi"
+  },
+  "disableScroll": true
 }

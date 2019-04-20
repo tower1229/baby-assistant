@@ -29,32 +29,35 @@
       <text>添加</text>
     </view>
   </view>
-  <view class="cu-timeline flex-1 {{themeName}}">
-  <!-- 列表开始 -->
-    <view wx:for="{{albums}}" wx:key="timestamp" class="cu-item text-orange " bindtap='view' data-id='{{item._id}}'>
-      <view class="content">
-        <view class="flex-row _hd">
-          <view class="flex-1 album-title">
-            {{item.titleDate}}
+  <view class='flex-1 {{themeName}} scroll_cont'>
+    <view class="cu-timeline">
+    <!-- 列表开始 -->
+      <view wx:for="{{albums}}" wx:key="timestamp" class="cu-item text-orange " bindtap='view' data-id='{{item._id}}'>
+        <view class="content">
+          <view class="flex-row _hd">
+            <view class="flex-1 album-title">
+              {{item.titleDate}}
+            </view>
+            <view hidden='{{!item.days}}' class="cu-tag sm line-orange">{{item.days}}</view>
           </view>
-          <view hidden='{{!item.days}}' class="cu-tag sm line-orange">{{item.days}}</view>
+          <view class='text-lg'>
+            {{item.description}}
+          </view>
+          <view class='margin-top photos-wrap {{item.albums.length > 4 ? "morePhotos" : ""}}'>
+            <image wx:for="{{item.albums}}" wx:for-item="photo" wx:key="{{photo}}"
+              class='thumbs eq-{{index}}'
+              style='z-index: {{10-index}};'
+              mode="aspectFill"
+              src="{{photo}}"
+            ></image>
+          </view>
         </view>
-        <view class='text-lg'>
-          {{item.description}}
-        </view>
-        <view class='margin-top photos-wrap'>
-          <image wx:for="{{item.photos}}" wx:for-item="photo" wx:key="{{photo}}"
-            class='thumbs eq-{{index}}'
-            style='z-index: {{10-index}};'
-            mode="aspectFill"
-            src="{{photo}}"
-          ></image>
-        </view>
+        
       </view>
-      
+      <view wx:if="{{!albums.length}}" class='nodata'></view>
     </view>
-    <view wx:if="{{!albums.length}}" class='nodata'></view>
   </view>
+  
 </view>
 <!-- 登录 -->
 <login bindlogin="loginHandle"></login>

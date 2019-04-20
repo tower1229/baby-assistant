@@ -1803,18 +1803,18 @@ button.icon.lg {
   display: block;
 }
 
-.cu-timeline>.cu-item {
+.cu-timeline .cu-item {
   padding: 30rpx 30rpx 30rpx 120rpx;
   position: relative;
   display: block;
   z-index: 0;
 }
 
-.cu-timeline>.cu-item:not([class*="text-"]) {
+.cu-timeline .cu-item:not([class*="text-"]) {
   color: #ccc;
 }
 
-.cu-timeline>.cu-item::after {
+.cu-timeline .cu-item::after {
   content: "";
   display: block;
   position: absolute;
@@ -1826,7 +1826,7 @@ button.icon.lg {
   z-index: 8;
 }
 
-.cu-timeline>.cu-item::before {
+.cu-timeline .cu-item::before {
   font-family: "iconfont";
   display: block;
   position: absolute;
@@ -1841,11 +1841,11 @@ button.icon.lg {
   left: 36rpx;
 }
 
-.cu-timeline>.cu-item:not([class*="icon-"])::before {
+.cu-timeline .cu-item:not([class*="icon-"])::before {
   content: "\e763";
 }
 
-.cu-timeline>.cu-item[class*="icon"]::before {
+.cu-timeline .cu-item[class*="icon"]::before {
   background: #fff;
   width: 50rpx;
   height: 50rpx;
@@ -1855,19 +1855,19 @@ button.icon.lg {
   left: 36rpx;
 }
 
-.cu-timeline>.cu-item>.content {
+.cu-timeline .cu-item>.content {
   padding: 30rpx;
   border-radius: 6rpx;
   display: block;
   line-height: 1.6;
 }
 
-.cu-timeline>.cu-item>.content:not([class*="bg-"]) {
+.cu-timeline .cu-item>.content:not([class*="bg-"]) {
   background: #f1f1f1;
   color: #666;
 }
 
-.cu-timeline>.cu-item>.content+.content {
+.cu-timeline .cu-item>.content+.content {
   margin-top: 20rpx;
 }
 

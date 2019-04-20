@@ -183,11 +183,25 @@ Page({
                 
                 this.update(true, true);
               },
-              fail: console.error
+              fail: err => {
+                wx.showToast({
+                  title: '头像下载失败，过一会儿再试试',
+                  icon: 'none',
+                  duration: 3000
+                })
+                
+              }
             })
 
           },
-          fail: console.error
+          fail: err => {
+            wx.showToast({
+              title: '头像竟然损坏了，请重新上传',
+              icon: 'none',
+              duration: 3000
+            })
+            
+          }
         })
       }
     }
@@ -259,7 +273,7 @@ Page({
                 ctx.setFontSize(baseEm)
                 //ctx.setFillStyle('#434343')
                 let textline2 = app.globalData.bmi ? `BMI ${app.globalData.bmi}` : `身高 ${self.data.height} CM`;
-                let textline3 = app.globalData.bmiPercent ? `超过${app.globalData.bmiPercent}%的小朋友` : `体重 ${weight} KG`
+                let textline3 = app.globalData.bmiPercent ? `超过${app.globalData.bmiPercent}%的小朋友` : `体重 ${self.data.weight} KG`
                 ctx.fillText(textline2, device.windowWidth / 3, device.windowWidth + baseEm * 5)
                 ctx.fillText(textline3, device.windowWidth / 3, device.windowWidth + baseEm * 6.7)
 
@@ -283,6 +297,12 @@ Page({
           })
           
         }
+      })
+    }else{
+      wx.showToast({
+        title: '你还没上传宝宝靓照呢',
+        icon: 'none',
+        duration: 2000
       })
     }
   },
