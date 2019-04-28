@@ -4,11 +4,9 @@
     "pages/index/index",
     "pages/question/question",
     "pages/baby/baby",
-    "pages/album/album",
-    "pages/about/about",
-    "pages/addAlbum/addAlbum",
-    "pages/albumDetail/albumDetail",
-    "pages/colorlens/colorlens"
+    "pages/generate/generate",
+    "pages/about/about"
+    
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -30,7 +28,7 @@
         "text": "成长"
       },
       {
-        "pagePath": "pages/album/album",
+        "pagePath": "pages/generate/generate",
         "iconPath": "/res/img/tabbar/component.png",
         "selectedIconPath": "/res/img/tabbar/component_cur.png",
         "text": "时光"
@@ -42,5 +40,6 @@
         "text": "关于"
       }
     ]
-  }
+  },
+  "sitemapLocation": "sitemap.json"
 }

@@ -140,5 +140,14 @@ module.exports = {
   },
   fix2: function (number) {
     return parseInt(number * 100) / 100
+  },
+  checkData: function (baby) {
+    if (!baby.birthday) {
+      baby.birthday = this.data.today
+    }
+    if (!baby.gender) {
+      baby.gender = '男'
+    }
+    return !!baby.weight && !!baby.length
   }
 }

@@ -1,7 +1,20 @@
 {
 	"description": "项目配置文件",
 	"packOptions": {
-		"ignore": []
+		"ignore": [
+			{
+				"type": "folder",
+				"value": "pages/addAlbum/addAlbum"
+			},
+			{
+				"type": "folder",
+				"value": "pages/albumDetail/albumDetail"
+			},
+			{
+				"type": "folder",
+				"value": "pages/colorlens/colorlens"
+			}
+		]
 	},
 	"setting": {
 		"urlCheck": true,
@@ -23,6 +36,8 @@
 	"isGameTourist": false,
 	"miniprogramRoot": "src/",
 	"cloudfunctionRoot": "cloudfunctions/",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -53,7 +68,7 @@
 				{
 					"id": 1,
 					"name": "时光相册",
-					"pathName": "pages/album/album",
+					"pathName": "pages/generate/generate",
 					"query": "",
 					"scene": null
 				}

@@ -2,4 +2,3 @@
 page{background:#f5f5f5;}
 .cu-form-group input{text-align: right;}
 
-.share__canvas{position: absolute;left:-750rpx; width:750rpx;height: 1000rpx;background:#fff; }

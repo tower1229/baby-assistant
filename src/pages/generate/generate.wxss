@@ -1,0 +1,4 @@
+page{height:100%; }
+.pageMenu{padding: 0 .5em;color:#fff;font-size: 1.5em;}
+.share__canvas{position: absolute;left:-750rpx; width:750rpx;height: 1000rpx;background:#fff; }
+

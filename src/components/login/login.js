@@ -19,8 +19,7 @@ Component({
    * 组件的初始数据
    */
   data: {
-    userInfo: userInfo,
-    loadModal: false,
+    userInfo: userInfo
   },
 
   /**
@@ -42,24 +41,20 @@ Component({
       if (app.globalData.openid) {
         this.checkRight()
       } else {
-        this.setData({
-          loadModal: '登录'
+        wx.showLoading({
+          title: '登录中',
+          mask: true
         })
         wx.cloud.callFunction({
           name: 'login',
           success: res => {
             app.globalData.openid = res.result.openid;
-            this.setData({
-              loadModal: false
-            }, () => {
-              this.checkRight()
-            })
+            
+            this.checkRight()
           },
           fail: err => {
             console.warn(err)
-            this.setData({
-              loadModal: false
-            })
+            wx.hideLoading()
           }
         })
       }
@@ -70,6 +65,7 @@ Component({
       } else {
         wx.getSetting({
           success: res => {
+            wx.hideLoading()
             if (res.authSetting['scope.userInfo']) {
               console.log(app.globalData.openid, '已授权')
               wx.getUserInfo({
@@ -91,6 +87,10 @@ Component({
                 userInfo: null
               })
             }
+          },
+          fail: (err) => {
+            console.warn(err)
+            wx.hideLoading()
           }
         })
       }

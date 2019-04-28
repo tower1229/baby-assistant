@@ -43,6 +43,9 @@
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
       <view class='content'>宝贝成长数据</view>
+      <view class='action' bindtap='hideModal'>
+        <text class='icon-close text-red'></text>
+      </view>
     </view>
     <form>
       <view class="cu-form-group">
@@ -95,34 +98,3 @@
     </form>
   </view>
 </view>
-
-<view class='margin'>
-  <button bindtap='magic' class='button bg-gradual-red'><text class="icon-magic"></text> 生成海报</button>
-</view>
-
-<!-- 离屏canvas -->
-<canvas canvas-id="myCanvas" class="share__canvas"></canvas>
-
-<!-- 海报弹窗 -->
-<view class="cu-modal {{shareImg ? 'show':''}}">
-  <view class="cu-dialog">
-    <view class="cu-bar bg-white justify-end">
-      <view class='content'>海报已生成</view>
-      <view class='action' bindtap='closeShareImg'>
-        <text class='icon-close text-red'></text>
-      </view>
-    </view>
-    <view class='margin'>
-      <image src='{{shareImg}}'
-    style="width: 600rpx; height: 800rpx; background-color: #eeeeee;"
-    ></image>
-    </view>
-    <view class="cu-bar bg-white justify-end">
-      <view class='action'>
-        <button class='cu-btn line-green text-green' bindtap='saveAlbum2Local'>保存到相册</button>
-
-      </view>
-    </view>
-  </view>
-</view>
-

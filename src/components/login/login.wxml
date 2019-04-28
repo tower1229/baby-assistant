@@ -1,8 +1,5 @@
 <!--components/login/login.wxml-->
-<!-- 登录loading -->
-<view class='cu-load load-modal' wx:if="{{loadModal}}"> 
-    <view class='gray-text'>{{loadModal}}...</view>
-</view>
+
 <!-- 授权 -->
 <view class="cu-modal {{!userInfo ? 'show':''}}">
   <view class="cu-dialog">
