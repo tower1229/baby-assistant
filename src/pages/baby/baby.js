@@ -111,7 +111,6 @@ Page({
         console.warn(err)
       }
     })
-
   },
   update: function (e, jumpCheck) {
     //验证
@@ -123,12 +122,15 @@ Page({
         duration: 2000
       })
     }
-    this.setData({
-      modalVisible: false,
-      ...baby
-    });
-    app.globalData.baby = baby;
-    this.syncCloud()
+    setTimeout(() => {
+      this.setData({
+        modalVisible: false,
+        ...baby
+      });
+      app.globalData.baby = baby;
+      this.syncCloud()
+    },16)
+    
   },
   //关闭弹窗
   hideModal: function(){
@@ -197,6 +199,8 @@ Page({
           })
         }
       })
+    }else{
+      console.warn('未上传头像')
     }
   },
   onShow: function () {
@@ -206,15 +210,18 @@ Page({
   },
   onReady: function () {
     const initBaby = () => {
-      if (baby.birthday) {
-        baby.formatDays = util.formatDays(baby.birthday)
-        this.setData({
-          ...baby
-        }, function () {
-          this.setAvatCache()
-        })
-
+      if (!baby.birthday) {
+        baby.birthday = this.data.today
       }
+      if (!baby.gender) {
+        baby.gender = '男'
+      }
+      baby.formatDays = util.formatDays(baby.birthday)
+      this.setData({
+        ...baby
+      }, function () {
+        this.setAvatCache()
+      })
 
       if (!util.checkData(baby)) {
         this.setData({

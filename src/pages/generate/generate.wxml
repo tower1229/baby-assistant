@@ -1,29 +1,38 @@
 <view class='flex-col' style='height:100%'>
+
   <view class='cu-custom' style="height:{{CustomBar}}px;">
     <view class="cu-bar fixed bg-orange " style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
       <view class='pageMenu' bindtap='uploadPic'>
-        <text class='icon-picfill'></text>
+        <text class='icon-camera'></text>
       </view>
       <view class='content'>留住好时光</view>
     </view>
   </view>
-
-  <view class='flex-1' style='text-align:center;background:#f5f5f5;padding:20rpx;box-sizing:border-box;'>
-    <image
-      style="width: 100%; height: 100%;"
-      mode="aspectFit"
-      src="{{shareImg}}"
-    ></image>
+<!-- 预览 -->
+  <view class='flex-1' style='background:#f5f5f5;padding:20rpx;box-sizing:border-box;'>
+    <view id='preview' style='height:100%'>
+      <canvas canvas-id="previewCanvas" style="margin:auto;width:{{previewWidth}}px;height: {{previewHeight}}px"></canvas>
+    </view>
+    
   </view>
-
+<!-- 编辑 -->
+  <view class="cu-form-group margin-top">
+    <view class='title'>
+      显示日期
+    </view>
+    <switch bindchange="toggleDateVisible"></switch>
+  </view>
+  <view class="cu-form-group top" wx:hide="{{modalName==null}}">
+    <view class='title'>显示文字</view>
+    <textarea placeholder="今天。。。" maxlength="30" placeholder-class='placeholder' bindblur="inputChange"></textarea>
+  </view>
   <view class='margin'>
-    <button bindtap='saveAlbum2Local' class='button bg-gradual-orange'><text class="icon-magic"></text> 保存到相册</button>
+    <button bindtap='saveAlbum2Local' class='button bg-gradual-orange'>保存到相册</button>
   </view>
 
 </view>
 <!-- 离屏canvas -->
 <canvas canvas-id="myCanvas" class="share__canvas"></canvas>
-
 
 <!-- 登录 -->
 <login bindlogin="loginHandle"></login>

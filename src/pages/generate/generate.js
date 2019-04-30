@@ -1,27 +1,41 @@
 // src/pages/about/about.js
 const app = getApp()
 const util = require('../../utils/util.js');
-
+const today = new Date();
+const todayFormat = util.formatTime(today, true)
 let baby;
 // 绘制
 const device = wx.getSystemInfoSync()
-const ctx = wx.createCanvasContext('myCanvas')
-const canvasOpt = {
-  width: device.windowWidth * device.pixelRatio,
-  height: device.windowWidth * device.pixelRatio / 3 * 4
-}
+const ctxOffScreen = wx.createCanvasContext('myCanvas')
+ctxOffScreen.customWidth = device.windowWidth;
+ctxOffScreen.customCanvasId = 'myCanvas'
+const ctxPreview = wx.createCanvasContext('previewCanvas')
+ctxPreview.customCanvasId = 'previewCanvas'
+//设置
+let visibleDate = false;
+let visibleText = '';
+let textColor = '#434343';
 
 Page({
-
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    locaAvatFile: '/res/img/fff.png',
-    shareImg: ''
+    locaAvatFile: '/res/img/grey.png',
+    shareImg: '',
+    previewWidth: 0,
+    previewHeight: 0
+  },
+  toggleDateVisible: function(e){
+    visibleDate = e.detail.value
+    this.magic(ctxPreview, true)
+  },
+  inputChange: function(e){
+    visibleText = e.detail.value.trim()
+    this.magic(ctxPreview, true)
   },
   setAvatCache: function () {
     wx.showLoading({
-      title: '获取宝宝照片...',
+      title: '更新照片...',
     })
     //头像缓存
     const savedFilePath = wx.getStorageSync('babyAvatCache')
@@ -34,13 +48,14 @@ Page({
             locaAvatFile: savedFilePath
           }, function () {
             wx.hideLoading()
-            this.magic()
+            this.magic(ctxPreview)
           })
         }
       })
-    }else if (this.data.photo) {
+    }else if (baby.photo) {
+      console.log(baby)
         wx.cloud.downloadFile({
-          fileID: this.data.photo,
+          fileID: baby.photo,
           success: res => {
             // 临时文件路径
             console.log(res.tempFilePath)
@@ -57,7 +72,7 @@ Page({
                       locaAvatFile: savedFilePath
                     }, function () {
                       wx.hideLoading()
-                      this.magic()
+                      this.magic(ctxPreview)
                     })
                   }
                 })
@@ -72,13 +87,26 @@ Page({
             })
           },
           fail: err => {
+            //云端头像损坏
             wx.showToast({
-              title: '头像竟然损坏了，请重新上传',
+              title: '请先上传图片',
               icon: 'none',
+              mask: true,
               duration: 3000
             })
+            wx.hideLoading()
+            this.magic(ctxPreview)
           }
         })
+    }else{
+      //没有头像
+      wx.showToast({
+        title: '请先上传图片',
+        icon: 'none',
+        mask: true,
+        duration: 3000
+      })
+      this.magic(ctxPreview)
     }
   },
   uploadPic: function(){
@@ -90,15 +118,73 @@ Page({
         this.setData({
           locaAvatFile: res.tempFilePaths[0]
         }, () => {
-          this.magic()
+          this.magic(ctxPreview)
         })
       }
     })
   },
-  magic: function () {
+  drawText: function (ctx, callback){
+    if(callback){
+      wx.showLoading({
+        title: '正在绘制',
+        mask: true
+      })
+    }
+    //文字
+    const baseEm = parseInt(ctx.customWidth / 24);
+    const textWidth = parseInt(ctx.customWidth / 3 * 2 * 0.8);
+    const textX = parseInt(ctx.customWidth / 3);
+    //清除文字区域
+    ctx.setFillStyle('white')
+    ctx.fillRect(0, ctx.customWidth, parseInt(ctx.customWidth / 3 * 2), parseInt(ctx.customWidth / 3))
+
+    ctx.setFillStyle(textColor)
+    ctx.setTextAlign('center')
+    ctx.font = `${parseInt(baseEm * 1.5)}px Arial`;
+    //标题
+    let textline1 = visibleDate ? todayFormat : baby.formatDays;
+    ctx.fillText(textline1, textX, ctx.customWidth + baseEm * 3, textWidth)
+    ctx.font = `${baseEm}px Arial`
+    //ctx.setFillStyle('#434343')
+    let textArray = [];
+    const baseTextTop = ctx.customWidth + baseEm * 5;
+    const baseTextLineHeight = parseInt(baseEm * 1.7);
+    if (visibleText) {
+      textArray = util.CalculateText.call(ctx, visibleText, textWidth)
+    } else {
+      let textline2 = app.globalData.bmi ? `BMI ${app.globalData.bmi}` : (baby.length ? `身高 ${baby.length} CM` : '');
+      let textline3 = textline2 ? (app.globalData.bmiPercent ? `超过${app.globalData.bmiPercent}%的小朋友` : `体重 ${baby.weight} KG`) : '请输入文字'
+      textArray = [textline2, textline3]
+    }
+    textArray.forEach((text, i) => {
+      ctx.fillText(text, textX, baseTextTop + (i * baseTextLineHeight), textWidth)
+    })
+    //输出
+    ctx.draw(true,  () => {
+      if (callback){
+        wx.canvasToTempFilePath({
+          canvasId: ctx.customCanvasId,
+          success: res => {
+            //生成
+            return this.setData({
+              shareImg: res.tempFilePath
+            }, function () {
+              wx.hideLoading()
+              typeof callback === 'function' && callback()
+            })
+          }
+        })
+      }else{
+        wx.hideLoading()
+      }
+    })
+  },
+  magic: function (ctx, RedrawText, callback) {
 
     let self = this;
-    if (self.data.locaAvatFile) {
+    if (RedrawText){
+      self.drawText(ctx)
+    }else{
       wx.getImageInfo({
         src: self.data.locaAvatFile,
         success(res) {
@@ -114,20 +200,21 @@ Page({
           }
           //绘制
           ctx.setFillStyle('white')
-          ctx.fillRect(0, 0, device.windowWidth, device.windowWidth / 3 * 4)
+          ctx.fillRect(0, 0, ctx.customWidth, ctx.customWidth / 3 * 4)
+
           //照片
-          ctx.drawImage(self.data.locaAvatFile, moveX, moveY, imageLength, imageLength, 0, 0, device.windowWidth, device.windowWidth)
+          ctx.drawImage(self.data.locaAvatFile, moveX, moveY, imageLength, imageLength, 0, 0, ctx.customWidth, ctx.customWidth)
           ctx.draw(false, function () {
             //取主色调
             wx.canvasGetImageData({
-              canvasId: 'myCanvas',
+              canvasId: ctx.customCanvasId,
               x: 0,
               y: 0,
-              width: device.windowWidth,
-              height: device.windowWidth,
+              width: ctx.customWidth,
+              height: ctx.customWidth,
               success(res) {
                 //console.log(res)
-                let r = 0, g = 0, b = 0, color;
+                let r = 0, g = 0, b = 0;
                 for (let row = 0; row < res.height; row++) {
                   for (let col = 0; col < res.width; col++) {
                     r += res.data[((res.width * row) + col) * 4];
@@ -145,84 +232,51 @@ Page({
                 r = Math.round(r);
                 g = Math.round(g);
                 b = Math.round(b);
+                //设置文字颜色
+                textColor = "rgb(" + r + "," + g + "," + b + ")";
 
-                color = "rgb(" + r + "," + g + "," + b + ")";
-                console.log(color)
+                //绘制二维码
+                ctx.drawImage('/res/img/qrcode.png', ctx.customWidth / 3 * 2, ctx.customWidth, ctx.customWidth / 3, ctx.customWidth / 3)
 
-                //二维码
-                ctx.drawImage('/res/img/qrcode.png', device.windowWidth / 3 * 2, device.windowWidth, device.windowWidth / 3, device.windowWidth / 3)
-                //文字
-                const baseEm = device.windowWidth / 24;
-                ctx.setFillStyle(color)
-                ctx.setTextAlign('center')
-                ctx.setFontSize(baseEm * 1.5)
-                ctx.fillText(self.data.formatDays, device.windowWidth / 3, device.windowWidth + baseEm * 3)
-                ctx.setFontSize(baseEm)
-                //ctx.setFillStyle('#434343')
-                let textline2 = app.globalData.bmi ? `BMI ${app.globalData.bmi}` : `身高 ${self.data.length} CM`;
-                let textline3 = app.globalData.bmiPercent ? `超过${app.globalData.bmiPercent}%的小朋友` : `体重 ${self.data.weight} KG`
-                ctx.fillText(textline2, device.windowWidth / 3, device.windowWidth + baseEm * 5)
-                ctx.fillText(textline3, device.windowWidth / 3, device.windowWidth + baseEm * 6.7)
-
-                ctx.draw(true, function () {
-                  wx.canvasToTempFilePath({
-                    canvasId: 'myCanvas',
-                    success(res) {
-                      //生成
-                      return self.setData({
-                        shareImg: res.tempFilePath
-                      }, function () {
-                        wx.hideLoading()
-                      })
-
-                    }
-                  })
-                })
-
+                self.drawText(ctx, callback)
+                
               }
             })
           })
 
         }
       })
-    } else {
-      wx.showToast({
-        title: '你还没上传宝宝靓照呢',
-        icon: 'none',
-        duration: 2000
-      })
-    }
+    } 
   },
   saveAlbum2Local: function () {
-    //海报存相册
-    let filepath = this.data.shareImg;
-    wx.saveImageToPhotosAlbum({
-      filePath: filepath,
-      success() {
-        wx.showToast({
-          title: '已保存到手机',
-          icon: 'none',
-          duration: 2000
-        })
-      },
-      fail: err => {
-        wx.showToast({
-          title: err.errMsg,
-          icon: 'none',
-          duration: 2000
-        })
-      }
+    this.magic(ctxOffScreen, false, () => {
+      //海报存相册
+      let filepath = this.data.shareImg;
+      wx.saveImageToPhotosAlbum({
+        filePath: filepath,
+        success() {
+          wx.showToast({
+            title: '已保存到手机',
+            icon: 'none',
+            duration: 2000
+          })
+        },
+        fail: err => {
+          wx.showToast({
+            title: err.errMsg,
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      })
     })
+    
   },
   loginHandle: function () {
     const initBaby = () => {
       if (baby.birthday) {
         baby.formatDays = util.formatDays(baby.birthday)
-        this.setData({
-          ...baby
-        }, function () {
-          this.setAvatCache()
-        })
+        this.setAvatCache()
       }
     }
 
@@ -247,6 +301,19 @@ Page({
       })
 
     }
+  },
+  onLoad: function(){
+    wx.createSelectorQuery().select('#preview').boundingClientRect(rect => {
+      let height = parseInt(rect.height);
+      let width = parseInt(height / 4 * 3);
+
+      ctxPreview.customWidth = width;
+
+      this.setData({
+        previewWidth: width,
+        previewHeight: height
+      })
+    }).exec()
 
   }
 
