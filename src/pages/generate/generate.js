@@ -142,7 +142,8 @@ Page({
     ctx.setTextAlign('center')
     ctx.font = `${parseInt(baseEm * 1.5)}px Arial`;
     //标题
-    let textline1 = visibleDate ? todayFormat : baby.formatDays;
+    let textline1 = visibleDate ? todayFormat : util.formatDays(baby.birthday);
+    
     ctx.fillText(textline1, textX, ctx.customWidth + baseEm * 3, textWidth)
     ctx.font = `${baseEm}px Arial`
     //ctx.setFillStyle('#434343')
@@ -274,14 +275,11 @@ Page({
   },
   loginHandle: function () {
     const initBaby = () => {
-      if (baby.birthday) {
-        baby.formatDays = util.formatDays(baby.birthday)
-        this.setAvatCache()
-      }
+      console.log(baby)
+      this.setAvatCache()
     }
 
     baby = app.globalData.baby;
-    console.log(baby)
     if (baby) {
       console.log('baby信息', baby)
       initBaby()
