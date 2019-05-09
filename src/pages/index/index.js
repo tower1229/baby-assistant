@@ -37,7 +37,7 @@ Page({
       bmi: 'BMI'
     }
     wx.showToast({
-      title: `【${tipHash[e.detail]}】 数据与同龄宝宝差异较大，请检查信息是否填写正确`,
+      title: `【${tipHash[e.detail]}】 数据与同龄宝宝差异较大，请检查是否填写正确`,
       icon: 'none',
       duration: 8000
     })

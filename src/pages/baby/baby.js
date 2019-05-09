@@ -5,6 +5,13 @@ const todayFormat = util.formatTime(today)
 const fiveYearsAgo = new Date(today.getTime() - 5 * (365 * 24 * 60 * 60 * 1000));
 
 let baby;
+let __photo = '';
+//清理数据
+const clearn = function(data){
+  const __baby = Object.assign({}, data);
+  delete __baby.photo;
+  return __baby
+}
 
 Page({
   /**
@@ -13,18 +20,21 @@ Page({
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    photo: '',
     locaAvatFile: '',
     picker: ['男', '女'],
     today: todayFormat,
     birthday: todayFormat,
     startDate: util.formatTime(fiveYearsAgo),
+    nickname: '',
     gender: '男',
     weight: null,
     length: null,
     formatDays: '',
     modalVisible: false,
     shareImg: ''
+  },
+  updateNickname(e) {
+    baby.nickname = e.detail.value
   },
   PickerChange(e) {
     baby.gender = this.data.picker[e.detail.value]
@@ -48,7 +58,7 @@ Page({
         wx.showLoading({
           title: '正在上传...',
         })
-        const oldImgId = baby.photo;
+        const oldImgId = __photo;
         // 上传图片
         wx.cloud.uploadFile({
           cloudPath: app.globalData.openid + '/baby-photo-' + parseInt(Math.random() * 1e6) + '.png',
@@ -56,13 +66,9 @@ Page({
           success: res => {
             // get resource ID
             console.log(res)
-            baby.photo = res.fileID;
-            this.setData({
-              photo: baby.photo
-            }, function () {
-              wx.hideLoading()
-              this.setAvatCache(true)
-            })
+            __photo = res.fileID;
+            wx.hideLoading()
+            this.setAvatCache(true)
 
             // 删除旧图片
             wx.cloud.deleteFile({
@@ -123,9 +129,10 @@ Page({
       })
     }
     setTimeout(() => {
+      const __baby = clearn(baby);
       this.setData({
         modalVisible: false,
-        ...baby
+        ...__baby
       });
       app.globalData.baby = baby;
       this.syncCloud()
@@ -153,12 +160,12 @@ Page({
           })
         }
       })
-    } else if (this.data.photo) {
+    } else if (__photo) {
       wx.showLoading({
         title: '更新头像缓存...',
       })
       wx.cloud.downloadFile({
-        fileID: this.data.photo,
+        fileID: __photo,
         success: res => {
           // 临时文件路径
           console.log(res.tempFilePath)
@@ -216,9 +223,10 @@ Page({
       if (!baby.gender) {
         baby.gender = '男'
       }
-      baby.formatDays = util.formatDays(baby.birthday)
+      baby.formatDays = util.formatDays(baby.birthday);
+      const __baby = clearn(baby);
       this.setData({
-        ...baby
+        ...__baby
       }, function () {
         this.setAvatCache()
       })

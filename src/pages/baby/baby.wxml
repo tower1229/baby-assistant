@@ -9,13 +9,13 @@
 
 <view class="cu-card case {{isCard?'no-card':''}}">
   <view class="cu-item shadow">
-    <view class='image ' bindtap='uploadImg'>
+    <view class='image'>
       <image src="{{locaAvatFile}}" mode="aspectFill" class='drawnode' style='background:#ccc' data-type="image"></image>
-      <view class="cu-tag bg-pink"><text class='icon-crownfill lg text-yellow'></text> 点击换照片</view>
-      <view wx-if="{{days}}" class='cu-bar bg-shadeBottom'>本宝宝健康成长 {{formatDays}} 啦！</view>
+      <view wx-if="{{days}}" class='cu-bar bg-shadeBottom'>{{nickname ? nickname : '宝宝'}}健康成长 {{formatDays}} 啦！</view>
     </view>
     <view class="cu-list menu menu-avatar">
-      <view class="cu-item" bindtap='edit'>
+      <view class="cu-item">
+
         <view wx:if="{{gender==='男'}}" class="cu-avatar lg round bg-blue">
           <text class='icon-crown lg'></text>
         </view>
@@ -24,16 +24,41 @@
         </view>
         
         <view class='content flex-sub'>
-          <view class='text-grey'>体重：{{weight || '-'}} KG</view>
-          <view class='text-grey flex justify-between'>
-            身高：{{length || '-'}} CM
-            <view class="text-pink text-sm">
-              <text class='icon-upload'></text>
-              点击更新数据
-            </view>
-          </view>
+          <view class='text-grey'>{{nickname ? nickname : '宝宝'}}</view>
+          <view class='text-gray text-sm'>
+            <text class='icon-infofill text-red'></text> {{gender==='男' ? '一位绅士' : '一名淑女'}}</view>
+        </view>
+        <view class='action'>
+          <view class='text-grey text-sm'>体重：{{weight || '-'}} KG</view>
+          <view class="text-grey text-sm">身高：{{length || '-'}} CM</view>
         </view>
       </view>
+      <view class="cu-bar bg-white solid-bottom" bindtap='uploadImg'>
+        <view class='action'>
+          <text class='icon-picfill text-green'></text> 更新头像
+        </view>
+        <view class='action'>
+          <text class='text-grey text-sm'>宝宝靓照来一张</text>
+        </view>
+      </view>
+      <view class="cu-bar bg-white solid-bottom" bindtap='edit'>
+        <view class='action'>
+          <text class='icon-writefill text-orange '></text> 记录成长
+        </view>
+        <view class='action'>
+          <text class='text-grey text-sm'>是谁在偷偷长高？</text>
+        </view>
+      </view>
+      <navigator class="cu-bar bg-white solid-bottom"
+        open-type="switchTab"
+        url="/pages/index/index">
+        <view class='action'>
+          <text class='icon-upstagefill text-red '></text> 健康状况
+        </view>
+        <view class='action'>
+          <text class='text-grey text-sm'>小目标还没有实现！</text>
+        </view>
+      </navigator>
     </view>
   </view>
 
@@ -43,9 +68,6 @@
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
       <view class='content'>宝贝成长数据</view>
-      <view class='action' bindtap='hideModal'>
-        <text class='icon-close text-red'></text>
-      </view>
     </view>
     <form>
       <view class="cu-form-group">
@@ -58,6 +80,12 @@
             {{birthday}}
           </view>
         </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class='title'>宝宝名号</view>
+        <input value="{{nickname}}" 
+          class='radius'
+          bindinput="updateNickname"></input>
       </view>
       <view class="cu-form-group">
         <view class='title'>宝宝性别</view>
@@ -92,8 +120,10 @@
         </view>
       </view>
       <view class='cu-form-group padding'>
-        <button class='cu-btn block bg-pink lg flex-1' bindtap='update'>
+        <button class='cu-btn block bg-pink lg flex-1 margin' bindtap='update'>
           <text class='icon-upload'></text> 填好啦</button>
+        <button class='cu-btn block lg flex-1 margin' bindtap='hideModal'>
+          再想想</button>
       </view>
     </form>
   </view>

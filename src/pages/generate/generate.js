@@ -135,10 +135,10 @@ Page({
     const textWidth = parseInt(ctx.customWidth / 3 * 2 * 0.8);
     const textX = parseInt(ctx.customWidth / 3);
     //清除文字区域
-    ctx.setFillStyle('white')
+    ctx.fillStyle = ('white')
     ctx.fillRect(0, ctx.customWidth, parseInt(ctx.customWidth / 3 * 2), parseInt(ctx.customWidth / 3))
 
-    ctx.setFillStyle(textColor)
+    ctx.fillStyle = (textColor)
     ctx.setTextAlign('center')
     ctx.font = `${parseInt(baseEm * 1.5)}px Arial`;
     //标题
@@ -146,7 +146,7 @@ Page({
     
     ctx.fillText(textline1, textX, ctx.customWidth + baseEm * 3, textWidth)
     ctx.font = `${baseEm}px Arial`
-    //ctx.setFillStyle('#434343')
+    //ctx.fillStyle = ('#434343')
     let textArray = [];
     const baseTextTop = ctx.customWidth + baseEm * 5;
     const baseTextLineHeight = parseInt(baseEm * 1.7);
@@ -200,7 +200,7 @@ Page({
             imageLength = res.height
           }
           //绘制
-          ctx.setFillStyle('white')
+          ctx.fillStyle = ('white')
           ctx.fillRect(0, 0, ctx.customWidth, ctx.customWidth / 3 * 4)
 
           //照片

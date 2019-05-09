@@ -13,6 +13,10 @@
 			{
 				"type": "folder",
 				"value": "pages/colorlens/colorlens"
+			},
+			{
+				"type": "file",
+				"value": "colorui.wxss.bak"
 			}
 		]
 	},
@@ -23,11 +27,12 @@
 		"minified": true,
 		"newFeature": true,
 		"nodeModules": true,
-		"autoAudits": false,
-		"uglifyFileName": true
+		"autoAudits": true,
+		"uglifyFileName": true,
+		"checkInvalidKey": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.4.2",
+	"libVersion": "2.4.4",
 	"appid": "wx519d99ee7ea64212",
 	"projectname": "宝贝成长助理",
 	"debugOptions": {
