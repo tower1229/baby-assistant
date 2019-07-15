@@ -1,0 +1,22 @@
+<!--components/image-clip/index.wxml-->
+<view class="cu-modal {{visible ? 'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class='content'>剪裁</view>
+    </view>
+    <view class='image-clip-wrap'>
+      <image wx-if="{{image}}"
+          style='width:{{wrapWidth}}rpx;height:{{wrapHeight}}rpx'
+          src="{{image}}"
+        ></image>
+        <view class='clip-area' style='width:{{clipWidth}}rpx;height:{{clipHeight}}rpx;left:{{moveX}}rpx;top:{{moveY}}rpx'></view>
+    </view>
+    <view class='cu-form-group'>
+      <button class='cu-btn block bg-green flex-1 margin' bindtap='trigger'>
+        剪裁</button>
+      <button class='cu-btn block flex-1 margin' bindtap='cancel'>
+        取消</button>
+    </view>
+    
+  </view>
+</view>

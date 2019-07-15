@@ -21,6 +21,7 @@ Page({
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     locaAvatFile: '/res/img/grey.png',
+    chooseImageUrl: '',
     shareImg: '',
     previewWidth: 0,
     previewHeight: 0
@@ -40,17 +41,11 @@ Page({
     //头像缓存
     const savedFilePath = wx.getStorageSync('babyAvatCache')
     if (savedFilePath){
-      wx.setStorage({
-        key: 'babyAvatCache',
-        data: savedFilePath,
-        success: () => {
-          this.setData({
-            locaAvatFile: savedFilePath
-          }, function () {
-            wx.hideLoading()
-            this.magic(ctxPreview)
-          })
-        }
+      this.setData({
+        locaAvatFile: savedFilePath
+      }, function () {
+        wx.hideLoading()
+        this.magic(ctxPreview)
       })
     }else if (baby.photo) {
       console.log(baby)
@@ -109,16 +104,20 @@ Page({
       this.magic(ctxPreview)
     }
   },
+  //选择本地照片
   uploadPic: function(){
     wx.chooseImage({
       count: 1,
       sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
       success: res => {
+        // this.setData({
+        //   locaAvatFile: res.tempFilePaths[0]
+        // }, () => {
+        //   this.magic(ctxPreview)
+        // })
         this.setData({
-          locaAvatFile: res.tempFilePaths[0]
-        }, () => {
-          this.magic(ctxPreview)
+          chooseImageUrl: res.tempFilePaths[0]
         })
       }
     })
@@ -178,6 +177,14 @@ Page({
       }else{
         wx.hideLoading()
       }
+    })
+  },
+  clipHandle: function(canvasData){
+    console.log(canvasData)
+  }, 
+  clipCancel: function(){
+    this.setData({
+      chooseImageUrl: ''
     })
   },
   magic: function (ctx, RedrawText, callback) {
@@ -275,30 +282,24 @@ Page({
   },
   loginHandle: function () {
     const initBaby = () => {
-      console.log(baby)
       this.setAvatCache()
     }
 
     baby = app.globalData.baby;
-    if (baby) {
-      console.log('baby信息', baby)
-      initBaby()
-    } else {
-      wx.showLoading({
-        title: '正在更新信息',
-      })
-      wx.cloud.callFunction({
-        name: 'get-baby',
-        success: res => {
-          console.log(res)
-          wx.hideLoading()
-          baby = res.result;
-          app.globalData.baby = baby;
-          initBaby()
-        }
-      })
-
-    }
+    
+    wx.showLoading({
+      title: '正在更新信息',
+    })
+    wx.cloud.callFunction({
+      name: 'get-baby',
+      success: res => {
+        console.log(res)
+        wx.hideLoading()
+        baby = res.result;
+        app.globalData.baby = baby;
+        this.setAvatCache()
+      }
+    })
   },
   onLoad: function(){
     wx.createSelectorQuery().select('#preview').boundingClientRect(rect => {

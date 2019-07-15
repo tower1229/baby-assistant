@@ -1,0 +1,9 @@
+.image-clip-wrap{
+  position: relative;
+  max-height: 800rpx;
+  overflow: auto;
+}
+.clip-area{
+  position: absolute;
+  border:1px solid red;
+}

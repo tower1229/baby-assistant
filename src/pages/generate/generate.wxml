@@ -36,3 +36,8 @@
 
 <!-- 登录 -->
 <login bindlogin="loginHandle"></login>
+<!-- 图片剪裁 -->
+<image-clip 
+  image="{{chooseImageUrl}}" 
+  bindcancel="clipCancel"
+  bindclip="clipHandle"></image-clip>

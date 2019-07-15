@@ -8,7 +8,7 @@ let baby;
 let __photo = '';
 //清理数据
 const clearn = function(data){
-  const __baby = Object.assign({}, data);
+  let __baby = Object.assign({}, data);
   delete __baby.photo;
   return __baby
 }
@@ -110,7 +110,7 @@ Page({
       name: 'set-baby',
       data: baby,
       success: res => {
-        console.log('同步成功', res)
+        console.log('同步成功', baby)
         typeof callback === 'function' && callback.call(this)
       },
       fail: err => {
@@ -129,13 +129,15 @@ Page({
       })
     }
     setTimeout(() => {
+      app.globalData.baby = baby;
+      this.syncCloud()
+
       const __baby = clearn(baby);
       this.setData({
         modalVisible: false,
         ...__baby
       });
-      app.globalData.baby = baby;
-      this.syncCloud()
+      
     },16)
     
   },
@@ -145,25 +147,20 @@ Page({
       modalVisible: false
     });
   },
-  setAvatCache: function (forceUpdate) {
-    //头像缓存
+  setAvatCache: function (forceUpdate, getMode) {
+    //存储头像缓存
     const savedFilePath = wx.getStorageSync('babyAvatCache')
     if (!forceUpdate && savedFilePath) {
-      wx.setStorage({
-        key: 'babyAvatCache',
-        data: savedFilePath,
-        success: () => {
-          this.setData({
-            locaAvatFile: savedFilePath
-          }, function () {
-            wx.hideLoading()
-          })
-        }
+      this.setData({
+        locaAvatFile: savedFilePath
+      }, function () {
+        wx.hideLoading()
       })
     } else if (__photo) {
       wx.showLoading({
         title: '更新头像缓存...',
       })
+      baby.photo = __photo;
       wx.cloud.downloadFile({
         fileID: __photo,
         success: res => {
@@ -186,8 +183,10 @@ Page({
                   })
                 }
               })
-
-              this.update(true, true);
+              if (!getMode){
+                this.update(true, true);
+              }
+              
             },
             fail: err => {
               wx.showToast({
@@ -223,12 +222,18 @@ Page({
       if (!baby.gender) {
         baby.gender = '男'
       }
+      
       baby.formatDays = util.formatDays(baby.birthday);
+      
+      if (baby.photo){
+        __photo = baby.photo;
+      }
+      
       const __baby = clearn(baby);
       this.setData({
         ...__baby
       }, function () {
-        this.setAvatCache()
+        this.setAvatCache(false, true)
       })
 
       if (!util.checkData(baby)) {
@@ -239,7 +244,7 @@ Page({
     }
     baby = app.globalData.baby;
     if (baby) {
-      console.log('baby信息', baby)
+      console.log('baby.js', baby)
       initBaby()
     } else {
       wx.showLoading({
@@ -251,6 +256,7 @@ Page({
           console.log(res)
           wx.hideLoading()
           baby = res.result;
+          
           app.globalData.baby = baby;
           initBaby()
         }
