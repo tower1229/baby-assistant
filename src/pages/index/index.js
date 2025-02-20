@@ -143,7 +143,7 @@ Page({
       return console.warn(app.globalData.openid, '用户未登录')
     }
     // 检查数据
-    wx.getSavedFileList({
+    wx.getFileSystemManager().getSavedFileList({
       success: (res) => {
         //文件映射
         const filePath = wx.getStorageSync('storageFileHash') || storageFileHash;

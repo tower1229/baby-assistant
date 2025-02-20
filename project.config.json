@@ -1,91 +1,75 @@
 {
-	"description": "项目配置文件",
-	"packOptions": {
-		"ignore": [
-			{
-				"type": "folder",
-				"value": "pages/addAlbum/addAlbum"
-			},
-			{
-				"type": "folder",
-				"value": "pages/albumDetail/albumDetail"
-			},
-			{
-				"type": "folder",
-				"value": "pages/colorlens/colorlens"
-			},
-			{
-				"type": "file",
-				"value": "colorui.wxss.bak"
-			}
-		]
-	},
-	"setting": {
-		"urlCheck": true,
-		"es6": true,
-		"postcss": true,
-		"minified": true,
-		"newFeature": true,
-		"nodeModules": true,
-		"autoAudits": false,
-		"uglifyFileName": true,
-		"checkInvalidKey": true,
-		"checkSiteMap": true,
-		"uploadWithSourceMap": true,
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		},
-		"enhance": true
-	},
-	"compileType": "miniprogram",
-	"libVersion": "2.6.6",
-	"appid": "wx519d99ee7ea64212",
-	"projectname": "宝贝成长助理",
-	"debugOptions": {
-		"hidedInDevtools": []
-	},
-	"isGameTourist": false,
-	"miniprogramRoot": "src/",
-	"cloudfunctionRoot": "cloudfunctions/",
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
-	"condition": {
-		"search": {
-			"current": -1,
-			"list": []
-		},
-		"conversation": {
-			"current": -1,
-			"list": []
-		},
-		"plugin": {
-			"current": -1,
-			"list": []
-		},
-		"game": {
-			"currentL": -1,
-			"list": []
-		},
-		"miniprogram": {
-			"current": 1,
-			"list": [
-				{
-					"id": 0,
-					"name": "扫码进入",
-					"pathName": "pages/about/about",
-					"query": "",
-					"scene": 1011
-				},
-				{
-					"id": 1,
-					"name": "时光相册",
-					"pathName": "pages/generate/generate",
-					"query": "",
-					"scene": null
-				}
-			]
-		}
-	}
+  "description": "项目配置文件",
+  "packOptions": {
+    "ignore": [
+      {
+        "value": "pages/addAlbum/addAlbum",
+        "type": "folder"
+      },
+      {
+        "value": "pages/albumDetail/albumDetail",
+        "type": "folder"
+      },
+      {
+        "value": "pages/colorlens/colorlens",
+        "type": "folder"
+      },
+      {
+        "value": "colorui.wxss.bak",
+        "type": "file"
+      }
+    ],
+    "include": []
+  },
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true,
+    "nodeModules": true,
+    "autoAudits": false,
+    "uglifyFileName": true,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "enhance": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.7.8",
+  "appid": "wx519d99ee7ea64212",
+  "projectname": "宝贝成长助理",
+  "miniprogramRoot": "src/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "扫码进入",
+          "pathName": "pages/about/about",
+          "query": "",
+          "scene": 1011
+        },
+        {
+          "name": "时光相册",
+          "pathName": "pages/generate/generate",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  },
+  "srcMiniprogramRoot": "src/",
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  },
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
 }

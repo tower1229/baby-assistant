@@ -29,17 +29,15 @@ App({
   onLaunch: function() {
     //初始化云环境
     wx.cloud.init({
+      env:"cloudbase-8grlv3hha693d6f6",
       traceUser: true
     });
     this.globalData.db = wx.cloud.database();
     
     // 获取系统状态栏信息
-    wx.getSystemInfo({
-      success: e => {
-        this.globalData.StatusBar = e.statusBarHeight;
-        this.globalData.CustomBar = e.platform == 'android' ? e.statusBarHeight + 50 : e.statusBarHeight + 45;
-      }
-    })
+    const windowInfo = wx.getWindowInfo();
+    this.globalData.StatusBar = windowInfo.statusBarHeight;
+    this.globalData.CustomBar = windowInfo.statusBarHeight * 3;
 
     //调试
     // wx.setEnableDebug({

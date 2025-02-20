@@ -37,7 +37,7 @@ Component({
    */
   methods: {
     setPercent: function (percent, median) {
-      const screenWidth = wx.getSystemInfoSync().windowWidth;
+      const screenWidth = wx.getWindowInfo().windowWidth;
       const percentPx = parseInt(screenWidth / 750 * 562.5 / 100 * percent);
 
       animation.translateY(-percentPx).step();

@@ -11,7 +11,7 @@
 <!-- 预览 -->
   <view class='flex-1' style='background:#f5f5f5;padding:20rpx;box-sizing:border-box;'>
     <view id='preview' style='height:100%'>
-      <canvas canvas-id="previewCanvas" style="margin:auto;width:{{previewWidth}}px;height: {{previewHeight}}px"></canvas>
+      <canvas id="previewCanvas" type="2d" style="margin:auto;width:{{previewWidth}}px;height: {{previewHeight}}px"></canvas>
     </view>
     
   </view>
@@ -32,12 +32,12 @@
 
 </view>
 <!-- 离屏canvas -->
-<canvas canvas-id="myCanvas" class="share__canvas"></canvas>
+<canvas id="myCanvas" type="2d" class="share__canvas"></canvas>
 
 <!-- 登录 -->
 <login bindlogin="loginHandle"></login>
 <!-- 图片剪裁 -->
-<image-clip 
+<!-- <image-clip 
   image="{{chooseImageUrl}}" 
   bindcancel="clipCancel"
-  bindclip="clipHandle"></image-clip>
+  bindclip="clipHandle"></image-clip> -->
