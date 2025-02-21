@@ -14,13 +14,29 @@ let previewCtx;
 //设置
 let visibleDate = false;
 let visibleText = "";
-let textColor = "#434343";
+const CONSTANTS = {
+  DEFAULT_AVATAR: "/res/img/grey.png",
+  QR_CODE_PATH: "/res/img/qrcode.png",
+  STORAGE_KEY: "babyAvatCache",
+  DEFAULT_TEXT_COLOR: "#434343",
+};
+
+// 初始化变量
+let textColor = CONSTANTS.DEFAULT_TEXT_COLOR;
+
+const showErrorToast = (message, duration = 3000) => {
+  wx.showToast({
+    title: message,
+    icon: "none",
+    duration: duration,
+  });
+};
 
 Page({
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    locaAvatFile: "/res/img/grey.png",
+    locaAvatFile: CONSTANTS.DEFAULT_AVATAR,
     chooseImageUrl: "",
     shareImg: "",
     previewWidth: 0,
@@ -39,9 +55,10 @@ Page({
       title: "更新照片...",
     });
     //头像缓存
-    const savedFilePath = wx.getStorageSync("babyAvatCache");
+    const savedFilePath = wx.getStorageSync(CONSTANTS.STORAGE_KEY);
     if (savedFilePath) {
-      this.setData({
+      this.setData(
+        {
           locaAvatFile: savedFilePath,
         },
         function () {
@@ -62,10 +79,11 @@ Page({
               const savedFilePath = res.savedFilePath;
               //本地存储路径
               wx.setStorage({
-                key: "babyAvatCache",
+                key: CONSTANTS.STORAGE_KEY,
                 data: savedFilePath,
                 success: () => {
-                  this.setData({
+                  this.setData(
+                    {
                       locaAvatFile: savedFilePath,
                     },
                     function () {
@@ -77,34 +95,20 @@ Page({
               });
             },
             fail: (err) => {
-              wx.showToast({
-                title: "头像下载失败，过一会儿再试试",
-                icon: "none",
-                duration: 3000,
-              });
+              showErrorToast("头像下载失败，过一会儿再试试");
             },
           });
         },
         fail: (err) => {
           //云端头像损坏
-          wx.showToast({
-            title: "请先上传图片",
-            icon: "none",
-            mask: true,
-            duration: 3000,
-          });
+          showErrorToast("请先上传图片");
           wx.hideLoading();
           this.magic(previewCtx, previewCanvas);
         },
       });
     } else {
       //没有头像
-      wx.showToast({
-        title: "请先上传图片",
-        icon: "none",
-        mask: true,
-        duration: 3000,
-      });
+      showErrorToast("请先上传图片");
       console.log("setAvatCache", previewCtx);
       this.magic(previewCtx, previewCanvas);
     }
@@ -117,7 +121,8 @@ Page({
       sizeType: ["compressed"],
       sourceType: ["album", "camera"],
       success: (res) => {
-        this.setData({
+        this.setData(
+          {
             locaAvatFile: res.tempFiles[0].tempFilePath,
           },
           () => {
@@ -165,16 +170,16 @@ Page({
     if (visibleText) {
       textArray = util.CalculateText.call(ctx, visibleText, textWidth);
     } else {
-      let textline2 = app.globalData.bmi ?
-        `BMI ${app.globalData.bmi}` :
-        baby.length ?
-        `身高 ${baby.length} CM` :
-        "";
-      let textline3 = textline2 ?
-        app.globalData.bmiPercent ?
-        `超过${app.globalData.bmiPercent}%的小朋友` :
-        `体重 ${baby.weight} KG` :
-        "请输入文字";
+      let textline2 = app.globalData.bmi
+        ? `BMI ${app.globalData.bmi}`
+        : baby.length
+        ? `身高 ${baby.length} CM`
+        : "";
+      let textline3 = textline2
+        ? app.globalData.bmiPercent
+          ? `超过${app.globalData.bmiPercent}%的小朋友`
+          : `体重 ${baby.weight} KG`
+        : "请输入文字";
       textArray = [textline2, textline3];
     }
     textArray.forEach((text, i) => {
@@ -191,7 +196,8 @@ Page({
         canvas: ctx.canvas,
         success: (res) => {
           //生成
-          return this.setData({
+          return this.setData(
+            {
               shareImg: res.tempFilePath,
             },
             function () {
@@ -221,119 +227,115 @@ Page({
       image.src = src;
     });
   },
-  magic: function (ctx, canvas, RedrawText, callback) {
+  getImageInfo(src) {
+    return new Promise((resolve, reject) => {
+      wx.getImageInfo({
+        src,
+        success: resolve,
+        fail: reject,
+      });
+    });
+  },
+  async magic(ctx, canvas, RedrawText, callback) {
     let self = this;
-
-    // 使用逻辑宽度作为基准
     const canvasWidth = ctx.logicWidth;
     const canvasHeight = ctx.logicHeight;
 
     if (RedrawText) {
-      self.drawText(ctx, canvasWidth, canvasHeight, callback);
-    } else {
-      wx.getImageInfo({
-        src: self.data.locaAvatFile,
-        success(res) {
-          // 计算图片缩放和位置
-          const canvasRatio = canvasWidth / canvasHeight; // 画布宽高比
-          const imageRatio = res.width / res.height; // 图片宽高比
+      return this.drawText(ctx, canvasWidth, canvasHeight, callback);
+    }
 
-          let drawWidth, drawHeight, sx, sy, sWidth, sHeight;
+    try {
+      const imageInfo = await this.getImageInfo(this.data.locaAvatFile);
+      // 计算图片缩放和位置
+      const imageRatio = imageInfo.width / imageInfo.height;
 
-          if (imageRatio > canvasRatio) {
-            // 图片较宽，以高度为准
-            sHeight = res.height;
-            sWidth = sHeight * canvasRatio;
-            sx = (res.width - sWidth) / 2;
-            sy = 0;
-          } else {
-            // 图片较高，以宽度为准
-            sWidth = res.width;
-            sHeight = sWidth / canvasRatio;
-            sx = 0;
-            sy = (res.height - sHeight) / 2;
+      // 计算目标绘制区域（正方形，以画布宽度为准）
+      const targetSize = canvasWidth;
+      let drawX = 0;
+      let drawY = 0;
+      let drawWidth = targetSize;
+      let drawHeight = targetSize;
+
+      // 源图像裁剪参数
+      let sx = 0;
+      let sy = 0;
+      let sWidth = imageInfo.width;
+      let sHeight = imageInfo.height;
+
+      if (imageRatio > 1) {
+        // 横向图片，以高度为准进行裁剪
+        sWidth = imageInfo.height;
+        sx = (imageInfo.width - sWidth) / 2;
+      } else if (imageRatio < 1) {
+        // 纵向图片，以宽度为准进行裁剪
+        sHeight = imageInfo.width;
+        sy = (imageInfo.height - sHeight) / 2;
+      }
+
+      // 绘制白色背景
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      // 绘制图片
+      self.createImage(this.data.locaAvatFile).then((image) => {
+        try {
+          ctx.drawImage(
+            image,
+            sx,
+            sy,
+            sWidth,
+            sHeight, // 源图像裁剪
+            drawX,
+            drawY,
+            drawWidth,
+            drawHeight // 目标画布位置和大小
+          );
+
+          // 获取主色调
+          const imageData = ctx.getImageData(0, 0, canvasWidth, canvasWidth);
+
+          // 计算主色调
+          let r = 0,
+            g = 0,
+            b = 0;
+          const pixels = imageData.width * imageData.height;
+
+          for (let i = 0; i < pixels * 4; i += 4) {
+            r += imageData.data[i];
+            g += imageData.data[i + 1];
+            b += imageData.data[i + 2];
           }
 
-          // 绘制白色背景
-          ctx.fillStyle = "white";
-          ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+          // 求取平均值
+          r = Math.round(r / pixels);
+          g = Math.round(g / pixels);
+          b = Math.round(b / pixels);
 
-          // 绘制图片
-          self.createImage(self.data.locaAvatFile).then((image) => {
-            try {
-              ctx.drawImage(
-                image,
-                sx,
-                sy,
-                sWidth,
-                sHeight, // 源图像裁剪
-                0,
-                0,
-                canvasWidth,
-                canvasWidth // 目标画布位置和大小
-              );
+          // 设置文字颜色
+          textColor = `rgb(${r},${g},${b})`;
 
-              // 获取主色调
-              const imageData = ctx.getImageData(
-                0,
-                0,
-                canvasWidth,
-                canvasWidth
-              );
+          // 绘制二维码
+          self.createImage(CONSTANTS.QR_CODE_PATH).then((image) => {
+            ctx.drawImage(
+              image,
+              (canvasWidth / 3) * 2,
+              canvasWidth,
+              canvasWidth / 3,
+              canvasWidth / 3
+            );
 
-              // 计算主色调
-              let r = 0,
-                g = 0,
-                b = 0;
-              const pixels = imageData.width * imageData.height;
-
-              for (let i = 0; i < pixels * 4; i += 4) {
-                r += imageData.data[i];
-                g += imageData.data[i + 1];
-                b += imageData.data[i + 2];
-              }
-
-              // 求取平均值
-              r = Math.round(r / pixels);
-              g = Math.round(g / pixels);
-              b = Math.round(b / pixels);
-
-              // 设置文字颜色
-              textColor = `rgb(${r},${g},${b})`;
-
-              // 绘制二维码
-              self.createImage("/res/img/qrcode.png").then((image) => {
-                ctx.drawImage(
-                  image,
-                  (canvasWidth / 3) * 2,
-                  canvasWidth,
-                  canvasWidth / 3,
-                  canvasWidth / 3
-                );
-
-                self.drawText(ctx, canvasWidth, canvasHeight, callback);
-              });
-            } catch (err) {
-              console.error("Error drawing image:", err);
-              wx.showToast({
-                title: "图片加载失败，请检查网络连接",
-                icon: "none",
-                duration: 3000,
-              });
-              wx.hideLoading();
-            }
+            self.drawText(ctx, canvasWidth, canvasHeight, callback);
           });
-        },
-        fail(err) {
-          console.error("Failed to get image info:", err);
-          wx.showToast({
-            title: "图片加载失败，请重试",
-            icon: "none",
-            duration: 3000,
-          });
+        } catch (err) {
+          console.error("Error drawing image:", err);
+          showErrorToast("图片加载失败，请检查网络连接");
           wx.hideLoading();
-        },
+        }
       });
+    } catch (err) {
+      showErrorToast("图片加载失败，请重试");
+      wx.hideLoading();
     }
   },
   saveAlbum2Local: function () {
@@ -417,7 +419,8 @@ Page({
       previewCtx.logicHeight = height;
 
       // 设置样式尺寸（css 像素）
-      this.setData({
+      this.setData(
+        {
           previewWidth: width,
           previewHeight: height,
         },

@@ -1,14 +1,66 @@
 @import "icon.wxss";
 @import "colorui.wxss";
+
+page,
+view,
+text,
+image,
+button,
+video,
+map,
+scroll-view,
+swiper,
+input,
+textarea,
+navigator {
+  position: relative;
+  box-sizing: border-box;
+  background-origin: border-box;
+  isolation: isolate;
+}
+page {
+  height: 100%;
+}
+
 /* flex栅格 */
-.flex-col {overflow: hidden;display: flex; flex-direction: column;}
-.flex-row {overflow: hidden; display: flex; }
-.flex-1 { flex: 1;}
-.flex-2 { flex: 2;}
-.flex-3 { flex: 3;}
-.flex-4 { flex: 4;}
-.align-stretch { align-items: stretch;}
-.align-center { align-items: center;}
-.justify-center {justify-content: center;}
-.flex-wrap { flex-wrap: wrap;}
-.scroll_cont {overflow: auto; box-sizing: border-box; width: 100%; height: 100%;overflow-scrolling: touch;-webkit-overflow-scrolling: touch;}
+.flex-col {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.flex-row {
+  overflow: hidden;
+  display: flex;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex-2 {
+  flex: 2;
+}
+.flex-3 {
+  flex: 3;
+}
+.flex-4 {
+  flex: 4;
+}
+.align-stretch {
+  align-items: stretch;
+}
+.align-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.scroll_cont {
+  overflow: auto;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
+}
