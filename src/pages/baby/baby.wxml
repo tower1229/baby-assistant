@@ -11,7 +11,7 @@
   <view class="cu-item shadow">
     <view class='image'>
       <image src="{{locaAvatFile}}" mode="aspectFill" class='drawnode' style='background:#ccc' data-type="image"></image>
-      <view wx-if="{{days}}" class='cu-bar bg-shadeBottom'>{{nickname ? nickname : '宝宝'}}健康成长 {{formatDays}} 啦！</view>
+      <view wx:if="{{days}}" class='cu-bar bg-shadeBottom'>{{nickname ? nickname : '宝宝'}}健康成长 {{formatDays}} 啦！</view>
     </view>
     <view class="cu-list menu menu-avatar">
       <view class="cu-item">
@@ -22,11 +22,12 @@
         <view wx:if="{{gender==='女'}}" class="cu-avatar lg round bg-red">
           <text class='icon-evaluate lg'></text>
         </view>
-        
+
         <view class='content flex-sub'>
           <view class='text-grey'>{{nickname ? nickname : '宝宝'}}</view>
           <view class='text-gray text-sm'>
-            <text class='icon-infofill text-red'></text> {{gender==='男' ? '一位绅士' : '一名淑女'}}</view>
+            <text class='icon-infofill text-red'></text> {{gender==='男' ? '一位绅士' : '一名淑女'}}
+          </view>
         </view>
         <view class='action'>
           <view class='text-grey text-sm'>体重：{{weight || '-'}} KG</view>
@@ -49,9 +50,7 @@
           <text class='text-grey text-sm'>是谁在偷偷长高？</text>
         </view>
       </view>
-      <navigator class="cu-bar bg-white solid-bottom"
-        open-type="switchTab"
-        url="/pages/index/index">
+      <navigator class="cu-bar bg-white solid-bottom" open-type="switchTab" url="/pages/index/index">
         <view class='action'>
           <text class='icon-upstagefill text-red '></text> 健康状况
         </view>
@@ -72,10 +71,7 @@
     <form>
       <view class="cu-form-group">
         <view class='title'>宝宝生日</view>
-        <picker mode="date" value="{{birthday}}" 
-        start="{{startDate}}"
-        end="{{today}}"
-        bindchange="DateChange">
+        <picker mode="date" value="{{birthday}}" start="{{startDate}}" end="{{today}}" bindchange="DateChange">
           <view class="picker">
             {{birthday}}
           </view>
@@ -83,9 +79,7 @@
       </view>
       <view class="cu-form-group">
         <view class='title'>宝宝名号</view>
-        <input value="{{nickname}}" 
-          class='radius'
-          bindinput="updateNickname"></input>
+        <input value="{{nickname}}" class='radius' bindinput="updateNickname"></input>
       </view>
       <view class="cu-form-group">
         <view class='title'>宝宝性别</view>
@@ -97,10 +91,7 @@
       </view>
       <view class="cu-form-group">
         <view class='title'>最新体重</view>
-        <input value="{{weight}}" 
-          class='radius'
-          type='digit'
-          bindinput="updateWeight"></input>
+        <input value="{{weight}}" class='radius' type='digit' bindinput="updateWeight"></input>
         <view class="cu-capsule radius">
           <view class='cu-tag bg-gray '>
             KG
@@ -109,10 +100,7 @@
       </view>
       <view class="cu-form-group">
         <view class='title'>最新身高</view>
-        <input value="{{length}}" 
-          class='radius' 
-          type='digit'
-          bindinput="updateLength"></input>
+        <input value="{{length}}" class='radius' type='digit' bindinput="updateLength"></input>
         <view class="cu-capsule radius">
           <view class='cu-tag bg-gray '>
             CM

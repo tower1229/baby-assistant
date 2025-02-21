@@ -41,8 +41,7 @@ Page({
     //头像缓存
     const savedFilePath = wx.getStorageSync("babyAvatCache");
     if (savedFilePath) {
-      this.setData(
-        {
+      this.setData({
           locaAvatFile: savedFilePath,
         },
         function () {
@@ -66,8 +65,7 @@ Page({
                 key: "babyAvatCache",
                 data: savedFilePath,
                 success: () => {
-                  this.setData(
-                    {
+                  this.setData({
                       locaAvatFile: savedFilePath,
                     },
                     function () {
@@ -119,8 +117,7 @@ Page({
       sizeType: ["compressed"],
       sourceType: ["album", "camera"],
       success: (res) => {
-        this.setData(
-          {
+        this.setData({
             locaAvatFile: res.tempFiles[0].tempFilePath,
           },
           () => {
@@ -168,16 +165,16 @@ Page({
     if (visibleText) {
       textArray = util.CalculateText.call(ctx, visibleText, textWidth);
     } else {
-      let textline2 = app.globalData.bmi
-        ? `BMI ${app.globalData.bmi}`
-        : baby.length
-        ? `身高 ${baby.length} CM`
-        : "";
-      let textline3 = textline2
-        ? app.globalData.bmiPercent
-          ? `超过${app.globalData.bmiPercent}%的小朋友`
-          : `体重 ${baby.weight} KG`
-        : "请输入文字";
+      let textline2 = app.globalData.bmi ?
+        `BMI ${app.globalData.bmi}` :
+        baby.length ?
+        `身高 ${baby.length} CM` :
+        "";
+      let textline3 = textline2 ?
+        app.globalData.bmiPercent ?
+        `超过${app.globalData.bmiPercent}%的小朋友` :
+        `体重 ${baby.weight} KG` :
+        "请输入文字";
       textArray = [textline2, textline3];
     }
     textArray.forEach((text, i) => {
@@ -194,8 +191,7 @@ Page({
         canvas: ctx.canvas,
         success: (res) => {
           //生成
-          return this.setData(
-            {
+          return this.setData({
               shareImg: res.tempFilePath,
             },
             function () {
@@ -385,7 +381,7 @@ Page({
     });
   },
   onLoad: function () {
-    const query = wx.createSelectorQuery();
+    const query = this.createSelectorQuery();
     const dpr = wx.getWindowInfo().pixelRatio;
     console.log("onload", dpr);
 
@@ -421,8 +417,7 @@ Page({
       previewCtx.logicHeight = height;
 
       // 设置样式尺寸（css 像素）
-      this.setData(
-        {
+      this.setData({
           previewWidth: width,
           previewHeight: height,
         },

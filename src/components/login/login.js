@@ -5,9 +5,7 @@ let userInfo = {};
 
 
 Component({
-  options: {
-    addGlobalClass: true
-  },
+  options: {},
   /**
    * 组件的属性列表
    */
@@ -49,7 +47,7 @@ Component({
           name: 'login',
           success: res => {
             app.globalData.openid = res.result.openid;
-            
+
             this.checkRight()
           },
           fail: err => {
@@ -95,12 +93,12 @@ Component({
         })
       }
     },
-    triggerLogin: function (myEventDetail){
+    triggerLogin: function (myEventDetail) {
       this.triggerEvent('login', myEventDetail)
     }
   },
   lifetimes: {
-    ready: function(){
+    ready: function () {
       this.login()
     }
   }

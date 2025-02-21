@@ -4,9 +4,7 @@ const baseWidth = 650;
 
 
 Component({
-  options: {
-    addGlobalClass: true,
-  },
+  options: {},
   /**
    * 组件的属性列表
    */
@@ -14,9 +12,9 @@ Component({
     image: {
       type: String,
       value: '',
-      observer: function (image){
+      observer: function (image) {
         const vm = this;
-        if (image){
+        if (image) {
           wx.getImageInfo({
             src: image,
             success(res) {
@@ -34,12 +32,12 @@ Component({
               })
 
             },
-            fail: function(err){
+            fail: function (err) {
               console.log(err)
             }
           })
         }
-        
+
         this.setData({
           visible: !!image
         })
@@ -64,12 +62,12 @@ Component({
    */
   methods: {
     trigger: function () {
-      if (canvasData){
+      if (canvasData) {
         this.triggerEvent('clip', canvasData)
       }
-      
+
     },
-    cancel: function(){
+    cancel: function () {
       this.triggerEvent('cancel')
     }
   }
